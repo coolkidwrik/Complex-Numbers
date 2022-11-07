@@ -27,11 +27,10 @@ class Complex (r.Real, i.Imaginary):
     def conjugate(self):
         return Complex(self.real, -1 * self.imaginary)
 
+    # gets the sign of the imaginary component
     def get_sign(self):
         complex_number = self.complex_to_string().split()
         return complex_number[1]
-
-
 
 
 # helper methods
@@ -52,10 +51,16 @@ def print_complex(c):
     print(c.complex_to_string())
 
 
+# adds two complex numbers together
+def add(c1, c2):
+    pass
 
 
 # testing
 c1 = Complex(1, 1)
 c2 = Complex(1, -1)
 c3 = Complex("3 + 2i")
-print_complex(c3)
+c = c2
+print_complex(c.conjugate())
+print_complex(c)
+print_complex()

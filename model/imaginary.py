@@ -4,9 +4,9 @@ import number
 class Imaginary(number.Number):
 
     @classmethod
-    def mult(cls, r):
+    def mult(cls, r1, r2):
         pass
 
     @classmethod
-    def mult(cls, r):
+    def div(cls, r1, r2):
         pass
