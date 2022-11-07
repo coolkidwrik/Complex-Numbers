@@ -32,6 +32,8 @@ class Complex (r.Real, i.Imaginary):
         return complex_number[1]
 
 
+
+
 # helper methods
 
 # returns string as real and imaginary components
@@ -45,9 +47,15 @@ def string_to_complex(complex_number_string):
         imaginary = int(complex_number[2][0: -1])
     return real, imaginary
 
+# print the complex number String onto console
+def print_complex(c):
+    print(c.complex_to_string())
+
+
+
 
 # testing
 c1 = Complex(1, 1)
 c2 = Complex(1, -1)
 c3 = Complex("3 + 2i")
-print(c3.complex_to_string())
+print_complex(c3)
