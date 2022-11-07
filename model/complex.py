@@ -18,10 +18,22 @@ class Complex (r.Real, i.Imaginary):
 
     # returns complex number as a string
     def complex_to_string(self):
-        if self.imaginary < 0:
-            return f"{self.real} - {-1* self.imaginary}i"
+        real = self.real
+        imaginary = self.imaginary
+        if real == 0:
+            if imaginary < 0:
+                return f"- {-1 * imaginary}i"
+            elif imaginary == 0:
+                return "0"
+            else:
+                return f"{imaginary}i"
         else:
-            return f"{self.real} + {self.imaginary}i"
+            if imaginary < 0:
+                return f"{real} - {-1 * imaginary}i"
+            elif imaginary == 0:
+                return f"{real}"
+            else:
+                return f"{real} + {imaginary}i"
 
     # returns complex conjugate
     def conjugate(self):
@@ -53,14 +65,31 @@ def print_complex(c):
 
 # adds two complex numbers together
 def add(c1, c2):
-    pass
+    real = c1.real + c2.real
+    imaginary = c1.imaginary + c2.imaginary
+    return Complex(real, imaginary)
+
+
+# adds two complex numbers together
+def sub(c1, c2):
+    real = c1.real - c2.real
+    imaginary = c1.imaginary - c2.imaginary
+    return Complex(real, imaginary)
+
+# adds two complex numbers together
+def mult(c1, c2):
+    real = c1.real*c2.real - c1.imaginary*c2.imaginary
+    imaginary = c1.real*c2.imaginary + c1.imaginary*c2.real
+    return Complex(real, imaginary)
 
 
 # testing
 c1 = Complex(1, 1)
 c2 = Complex(1, -1)
 c3 = Complex("3 + 2i")
-c = c2
-print_complex(c.conjugate())
-print_complex(c)
-print_complex()
+c4 = mult(c1,c2)
+print_complex(c1)
+print_complex(c2)
+print_complex(c4)
+
+
