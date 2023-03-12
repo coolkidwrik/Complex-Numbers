@@ -61,7 +61,7 @@ class Complex (r.Real, i.Imaginary):
     def rect_to_euler(self):
         argument = complex_to_string(self.arg())
         modulo = complex_to_string(self.mod())
-        if argument == "0":
+        if abs(m.sin(float(argument))) < 1e-7:
             return modulo
         else:
             return f"{modulo}e^{argument}i"
@@ -71,7 +71,7 @@ class Complex (r.Real, i.Imaginary):
     def rect_to_cis(self):
         argument = complex_to_string(self.arg())
         modulo = complex_to_string(self.mod())
-        if argument == "0":
+        if abs(m.sin(float(argument))) < 1e-7:
             return modulo
         else:
             return f"{modulo}(cos({argument}) + isin({argument}))"
@@ -194,7 +194,7 @@ t1 = Complex("-3")
 t2 = Complex.div(t1, t1)
 t3 = Complex.div(t2, t1)
 t4 = Complex.div(t1, t3)
-print(euler_exponent(t1))
+print(t1.rect_to_cis())
 print(t2.rect_to_cis())
 print(t3.rect_to_cis())
 print(t4.rect_to_cis())
