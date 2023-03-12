@@ -1,6 +1,7 @@
 import number
 
 
+# defines all the same functions as the Number class, except multiply
 class Imaginary(number.Number):
 
     @staticmethod
