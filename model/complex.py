@@ -71,13 +71,35 @@ class Complex (r.Real, i.Imaginary):
 def string_to_complex(complex_number_string):
     assert type(complex_number_string) == str, f"{complex_number_string} is not a str"
     complex_number = complex_number_string.split()
-    assert len(complex_number) == 3, f"{complex_number_string} is not formatted correctly! try adding spaces"
+    assert len(complex_number) == 3 or len(complex_number) == 1, \
+        f"{complex_number_string} is not formatted correctly! must be in the for \"a + bi\""
+    if len(complex_number) == 1:
+        return string_to_complex_one_arg(complex_number)
+    else:
+        return string_to_complex_three_arg(complex_number)
+
+
+def string_to_complex_one_arg(complex_number):
+    if complex_number[0][-1] == "i":
+        if complex_number[0] == 'i':
+            imaginary = 1
+        else:
+            imaginary = int(complex_number[2][0: -1])
+        return 0, imaginary
+    else:
+        return complex_number[0], 0
+
+
+def string_to_complex_three_arg(complex_number):
     real = int(complex_number[0])
     sign = complex_number[1]
-    if sign == '-':
-        imaginary = -1 * int(complex_number[2][0: -1])
+    assert sign in ["+", "-"], f"\"{sign}\" is not valid, must be either \"+\" or \"-\""
+    if complex_number[2] == 'i':
+        imaginary = 1
     else:
         imaginary = int(complex_number[2][0: -1])
+    if sign == '-':
+        imaginary *= -1
     return real, imaginary
 
 
@@ -102,22 +124,22 @@ def complex_to_string(self):
 
 
 # print the complex number String onto console
-def print_complex(c):
-    print(complex_to_string(c))
+# def print_complex(c):
+#     print(complex_to_string(c))
 
 # testing
 
 
-t1 = Complex(2, 3)
-t2 = Complex(5, 2)
-t3 = Complex.add(t1, t2)
-t4 = Complex.mult(t1, t2)
-t5 = Complex.div(t1, t2)
+t1 = Complex("i")
+t2 = Complex.mult(t1, t1)
+t3 = Complex.mult(t2, t1)
+t4 = Complex.mult(t1, t3)
 print(t1)
 print(t2)
 print(t3)
 print(t4)
-print(t5)
+
+
 
 
 
