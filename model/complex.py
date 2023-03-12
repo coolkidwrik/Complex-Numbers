@@ -1,5 +1,6 @@
 import real as r
 import imaginary as i
+import math as m
 
 
 # defines a complex number consisting of a real and imaginary part
@@ -39,6 +40,29 @@ class Complex (r.Real, i.Imaginary):
     def get_sign(self):
         complex_number = self.complex_to_string().split()
         return complex_number[1]
+
+    # returns the argument of a complex number
+    def arg(self):
+        real = self.real
+        imaginary = self.imaginary
+        result = m.atan(imaginary/real)
+        if real >= 0:
+            return result
+        else:
+            return m.pi - result
+
+    # returns the modulus of a complex number
+    def mod(self):
+        return m.sqrt(pow(self.real, 2) + pow(self.imaginary, 2))
+
+    # returns a string representation of euler's form of the complex number
+    def euler_form(self):
+        argument = self.arg()
+        modulo = self.mod()
+        if argument == 0:
+            return str(modulo)
+        else:
+            return f"{modulo}e^{argument}i"
 
     # adds two complex numbers together
     @staticmethod
@@ -137,15 +161,14 @@ def complex_to_string(self):
 
 # testing
 
-
-t1 = Complex("-1")
+t1 = Complex("-3")
 t2 = Complex.div(t1, t1)
 t3 = Complex.div(t2, t1)
 t4 = Complex.div(t1, t3)
-print(t1)
-print(t2)
-print(t3)
-print(t4)
+print(t1.euler_form())
+print(t2.euler_form())
+print(t3.euler_form())
+print(t4.euler_form())
 
 
 
