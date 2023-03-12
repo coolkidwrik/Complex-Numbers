@@ -79,6 +79,7 @@ def string_to_complex(complex_number_string):
         return string_to_complex_three_arg(complex_number)
 
 
+# helper function for string_to_complex, if the input string is 1 distinct character
 def string_to_complex_one_arg(complex_number):
     if complex_number[0][-1] == "i":
         if complex_number[0] == 'i':
@@ -90,6 +91,7 @@ def string_to_complex_one_arg(complex_number):
         return complex_number[0], 0
 
 
+# helper function for string_to_complex, if the input string is 3 distinct characters
 def string_to_complex_three_arg(complex_number):
     real = int(complex_number[0])
     sign = complex_number[1]
@@ -108,12 +110,12 @@ def complex_to_string(self):
     real = self.real
     imaginary = self.imaginary
     if real == 0:
-        if imaginary < 0:
-            return f" {-1 * imaginary}i"
-        elif imaginary == 0:
+        if imaginary == 0:
             return "0"
+        elif imaginary == 1:
+            return "i"
         else:
-            return f"{imaginary}i"
+            return str(imaginary) + "i"
     else:
         if imaginary < 0:
             return f"{real} - {-1 * imaginary}i"
