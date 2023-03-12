@@ -9,15 +9,21 @@ class Complex (r.Real, i.Imaginary):
     # if number of arguments is 1, its given a string and creates a complex number
     # if number of arguments is 2, its given a real and imaginary component and creates a complex number
     def __init__(self, *args):
-        assert len(args) < 3, "no constructor for these arguments"
+        assert 3 > len(args) > 0, "no constructor for these arguments"
         if len(args) == 1:  # constructor one
             assert type(args[0]) == str, f"argument \"{args[0]}\" is not of type str"
             nums = string_to_complex(args[0])
             self.real = nums[0]
             self.imaginary = nums[1]
         else:              # constructor two
-            assert (type(args[0]) == type(args[1])) and (type(args[0]) == int or type(args[0]) == float), \
-                f"arguments, \"{args[0]}\" or \"{args[1]}\" are not of type str"
+            # assert type(args[0]) == int, f"->{args[0]}"
+            # assert type(args[0]) == float, f"->{args[0]}"
+            # assert type(args[1]) == int, f"->{args[1]}"
+            # assert type(args[1]) == float, f"->{args[1]}"
+            assert (type(args[0]) == int or type(args[0]) == float) and \
+                   (type(args[1]) == int or type(args[1]) == float), \
+                   f"one of arguments, \"{args[0]}\" or \"{args[1]}\" are not numbers"
+
             self.real = args[0]
             self.imaginary = args[1]
 
@@ -132,10 +138,10 @@ def complex_to_string(self):
 # testing
 
 
-t1 = Complex("i")
-t2 = Complex.mult(t1, t1)
-t3 = Complex.mult(t2, t1)
-t4 = Complex.mult(t1, t3)
+t1 = Complex("-1")
+t2 = Complex.div(t1, t1)
+t3 = Complex.div(t2, t1)
+t4 = Complex.div(t1, t3)
 print(t1)
 print(t2)
 print(t3)

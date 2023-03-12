@@ -13,4 +13,5 @@ class Number:
 
     @staticmethod
     def div(r1, r2):
+        assert r2 != 0, "Cannot divide by 0"
         return r1 / r2
