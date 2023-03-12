@@ -47,22 +47,34 @@ class Complex (r.Real, i.Imaginary):
         imaginary = self.imaginary
         result = m.atan(imaginary/real)
         if real >= 0:
-            return result
+            return Complex(str(result))
         else:
-            return m.pi - result
+            return Complex(str(m.pi - result))
 
-    # returns the modulus of a complex number
+    # returns the modulus of a complex number, which is itself a complex number
     def mod(self):
-        return m.sqrt(pow(self.real, 2) + pow(self.imaginary, 2))
+        result = m.sqrt(pow(self.real, 2) + pow(self.imaginary, 2))
+        return Complex(str(result))
 
-    # returns a string representation of euler's form of the complex number
-    def euler_form(self):
-        argument = self.arg()
-        modulo = self.mod()
-        if argument == 0:
-            return str(modulo)
+    # returns a string representation of euler's form of the complex number in
+    # rectangular form
+    def rect_to_euler(self):
+        argument = complex_to_string(self.arg())
+        modulo = complex_to_string(self.mod())
+        if argument == "0":
+            return modulo
         else:
             return f"{modulo}e^{argument}i"
+
+    # returns a string representation of euler's form of the complex number
+    # in rectangular form
+    def rect_to_cis(self):
+        argument = complex_to_string(self.arg())
+        modulo = complex_to_string(self.mod())
+        if argument == "0":
+            return modulo
+        else:
+            return f"{modulo}(cos({argument}) + isin({argument}))"
 
     # adds two complex numbers together
     @staticmethod
@@ -94,10 +106,15 @@ class Complex (r.Real, i.Imaginary):
         imaginary = i.Imaginary.div(numerator.imaginary, denominator.real)
         return Complex(real, imaginary)
 
-        # raises complex number to the power of another complex number
-        @staticmethod
-        def power(c1, c2):
-            pass
+    # raises complex number, c1 to the power of another complex number, c2
+    @staticmethod
+    def power(c1, c2):
+        # modulo = c1.mod()
+        # exponent = euler_exponent(c1)
+        # c = Complex.mult(exponent, c2)
+        # real = m.exp(c.real) +
+        pass
+
 
 
 # helper methods
@@ -178,9 +195,9 @@ t2 = Complex.div(t1, t1)
 t3 = Complex.div(t2, t1)
 t4 = Complex.div(t1, t3)
 print(euler_exponent(t1))
-print(t2.euler_form())
-print(t3.euler_form())
-print(t4.euler_form())
+print(t2.rect_to_cis())
+print(t3.rect_to_cis())
+print(t4.rect_to_cis())
 
 
 
