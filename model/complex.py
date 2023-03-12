@@ -94,11 +94,16 @@ class Complex (r.Real, i.Imaginary):
         imaginary = i.Imaginary.div(numerator.imaginary, denominator.real)
         return Complex(real, imaginary)
 
+        # raises complex number to the power of another complex number
+        @staticmethod
+        def power(c1, c2):
+            pass
+
 
 # helper methods
 
 # returns string as real and imaginary components
-def string_to_complex(complex_number_string):
+def string_to_complex(complex_number_string: str):
     assert type(complex_number_string) == str, f"{complex_number_string} is not a str"
     complex_number = complex_number_string.split()
     assert len(complex_number) == 3 or len(complex_number) == 1, \
@@ -115,7 +120,7 @@ def string_to_complex_one_arg(complex_number):
         if complex_number[0] == 'i':
             imaginary = 1
         else:
-            imaginary = int(complex_number[2][0: -1])
+            imaginary = float(complex_number[0][0: -1])
         return 0, imaginary
     else:
         return float(complex_number[0]), 0
@@ -155,6 +160,13 @@ def complex_to_string(self):
             return f"{real} + {imaginary}i"
 
 
+# returns the exponent of euler's form as a complex number
+def euler_exponent(complex_number):
+    s = f"{complex_number.arg()}i"
+    return Complex(s)
+
+
+
 # print the complex number String onto console
 # def print_complex(c):
 #     print(complex_to_string(c))
@@ -165,7 +177,7 @@ t1 = Complex("-3")
 t2 = Complex.div(t1, t1)
 t3 = Complex.div(t2, t1)
 t4 = Complex.div(t1, t3)
-print(t1.euler_form())
+print(euler_exponent(t1))
 print(t2.euler_form())
 print(t3.euler_form())
 print(t4.euler_form())
