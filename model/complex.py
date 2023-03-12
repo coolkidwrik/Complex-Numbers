@@ -94,18 +94,18 @@ def string_to_complex_one_arg(complex_number):
             imaginary = int(complex_number[2][0: -1])
         return 0, imaginary
     else:
-        return complex_number[0], 0
+        return float(complex_number[0]), 0
 
 
 # helper function for string_to_complex, if the input string is 3 distinct characters
 def string_to_complex_three_arg(complex_number):
-    real = int(complex_number[0])
+    real = float(complex_number[0])
     sign = complex_number[1]
     assert sign in ["+", "-"], f"\"{sign}\" is not valid, must be either \"+\" or \"-\""
     if complex_number[2] == 'i':
         imaginary = 1
     else:
-        imaginary = int(complex_number[2][0: -1])
+        imaginary = float(complex_number[2][0: -1])
     if sign == '-':
         imaginary *= -1
     return real, imaginary
