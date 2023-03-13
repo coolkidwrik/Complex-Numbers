@@ -47,14 +47,14 @@ class Complex (r.Real, i.Imaginary):
         imaginary = self.imaginary
         result = m.atan(imaginary/real)
         if real >= 0:
-            return Complex(str(result))
+            return Complex(result, 0)
         else:
-            return Complex(str(m.pi - result))
+            return Complex(m.pi - result, 0)
 
     # returns the modulus of a complex number, which is itself a complex number
     def mod(self):
         result = m.sqrt(pow(self.real, 2) + pow(self.imaginary, 2))
-        return Complex(str(result))
+        return Complex(result, 0)
 
     # returns a string representation of euler's form of the complex number in
     # rectangular form
@@ -107,13 +107,13 @@ class Complex (r.Real, i.Imaginary):
         return Complex(real, imaginary)
 
     # raises complex number, c1 to the power of another complex number, c2
+    # input expression looks like (a + bi)^(c + di)
     @staticmethod
     def power(c1, c2):
-        # modulo = c1.mod()
-        # exponent = euler_exponent(c1)
-        # c = Complex.mult(exponent, c2)
-        # real = m.exp(c.real) +
-        pass
+        if c2.imaginary != 0:
+            return pow_with_real_exp(c1, c2)
+        else:
+            return pow_with_complex_exp(c1, c2)
 
 
 
@@ -158,9 +158,9 @@ def string_to_complex_three_arg(complex_number):
 
 
 # returns complex number as a string
-def complex_to_string(self):
-    real = self.real
-    imaginary = self.imaginary
+def complex_to_string(complex_number: Complex):
+    real = complex_number.real
+    imaginary = complex_number.imaginary
     if real == 0:
         if imaginary == 0:
             return "0"
@@ -178,9 +178,69 @@ def complex_to_string(self):
 
 
 # returns the exponent of euler's form as a complex number
-def euler_exponent(complex_number):
-    s = f"{complex_number.arg()}i"
-    return Complex(s)
+def euler_exponent(complex_number: Complex):
+    return Complex(0, complex_number.arg())
+
+
+# helper for pow function if exponent is complex (in the form a + bi)
+def pow_with_complex_exp(c1: Complex, c2: Complex):
+    modulo = c1.mod()  # r
+    c1_exponent = euler_exponent(c1)  # ti
+    real_exp = Complex(c2.real, 0)  # c
+    imaginary_exp = Complex(0, c2.imaginary) # di
+
+    # modulus
+    n_modulo = new_modulo(modulo, real_exp, imaginary_exp)
+    # cis
+    n_cis = new_cis(c1_exponent, real_exp, imaginary_exp)
+    # result
+    result = Complex.mult(n_modulo, n_cis)
+    return result
+
+
+# helper for pow_with_complex_exp()
+# the following code works as follows:
+# a + bi = r*e^ti where r is modulus and t is the argument.
+# ti is c1_exponent
+# when raised to the power of c + di, we get (r^(c + di))*e^((c + di)ti)
+# this part of the code will focus on r^(c + di), which yields a complex number
+# r^(c + di) = (r^c)*(r^di)
+def new_modulo(modulo, real_exp, imaginary_exp):
+    # r^c
+    rc = Complex(pow(modulo, real_exp), 0)
+
+    # r^(di) = e^(ln(r^d)i) = cos(ln(r^d)) + i*sin(ln(r^d))
+    n_arg = m.log(pow(modulo, imaginary_exp), m.e)  # ln(r^d)
+    rdi = Complex(m.cos(n_arg), m.sin(n_arg))
+
+    # (r ^ c) * (r ^ di)
+    return Complex.mult(rc, rdi)
+
+
+# helper for pow_with_complex_exp()
+# the following code works as follows:
+# a + bi = r*e^ti where r is modulus and t is the argument.
+# ti is c1_exponent
+# when raised to the power of c + di, we get (r^(c + di))*e^((c + di)ti)
+# this part of the code will focus on e^((c + di)ti, which yields a complex number
+# e^((c + di)ti = (e^-(dt))*(e^(cti))
+def new_cis(c1_exponent, real_exp, imaginary_exp):
+    # (e^-(dt))
+    edt = m.exp(Complex.mult(c1_exponent, imaginary_exp))
+
+    # (e ^ (cti)) = cos(ct) + i*sin(ct)
+    ct = Complex.mult(real_exp, imaginary_exp).imaginary
+    ecti = Complex(m.cos(ct), m.sin(ct))
+
+    # (e^-(dt))*(e^(cti))
+    return Complex.mult(edt, ecti)
+
+
+# helper for pow function if exponent is real
+# uses De Moivre's theorem for simplification
+# De Moivre's theorem: (a + bi)^n =
+def pow_with_real_exp(c1, c2):
+    pass
 
 
 
@@ -194,10 +254,10 @@ t1 = Complex("-3")
 t2 = Complex.div(t1, t1)
 t3 = Complex.div(t2, t1)
 t4 = Complex.div(t1, t3)
-print(t1.rect_to_cis())
-print(t2.rect_to_cis())
-print(t3.rect_to_cis())
-print(t4.rect_to_cis())
+print(t1.rect_to_euler())
+print(t2.rect_to_euler())
+print(t3.rect_to_euler())
+print(t4.rect_to_euler())
 
 
 
