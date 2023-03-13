@@ -140,9 +140,11 @@ def string_to_complex(complex_number_string: str):
 
 # helper function for string_to_complex, if the input string is 1 distinct character
 def string_to_complex_one_arg(complex_number):
-    if complex_number[0][-1] == "i":
+    if complex_number[0][-1] == 'i':
         if complex_number[0] == 'i':
             imaginary = 1
+        elif complex_number[0] == '-i':
+            imaginary = -1
         else:
             imaginary = float(complex_number[0][0: -1])
         return 0, imaginary
@@ -173,13 +175,19 @@ def complex_to_string(complex_number: Complex):
             return "0"
         elif imaginary == 1:
             return "i"
+        elif imaginary == -1:
+            return "-i"
         else:
             return str(imaginary) + "i"
     else:
-        if imaginary < 0:
-            return f"{real} - {-1 * imaginary}i"
-        elif imaginary == 0:
+        if imaginary == 0:
             return f"{real}"
+        elif imaginary == 1:
+            return f"{real} + i"
+        elif imaginary == -1:
+            return f"{real} - i"
+        elif imaginary < 0:
+            return f"{real} - {-1 * imaginary}i"
         else:
             return f"{real} + {imaginary}i"
 
@@ -257,8 +265,16 @@ def pow_with_real_exp(c1, c2):
 
 # testing
 
-t1 = Complex("i")
-print(Complex.power(t1, t1))
+t1 = Complex("-i")
+t2 = Complex.div(t1, t1)
+t3 = Complex.div(t2, t1)
+t4 = Complex.div(t3, t2)
+print(t1)
+print(t2)
+print(t3)
+print(t4)
+
+#print(Complex.power(t1, t1))
 
 
 
