@@ -43,9 +43,16 @@ class Complex (r.Real, i.Imaginary):
 
     # returns the argument of a complex number
     def arg(self):
+        # !!! bug in this function
         real = self.real
         imaginary = self.imaginary
-        result = m.atan(imaginary/real)
+        if real == 0:
+            if imaginary < 0:
+                result = m.pi*(-1/2)
+            else:
+                result = m.pi*(1/2)
+        else:
+            result = m.atan(imaginary/real)
         if real >= 0:
             return Complex(result, 0)
         else:
@@ -110,7 +117,7 @@ class Complex (r.Real, i.Imaginary):
     # input expression looks like (a + bi)^(c + di)
     @staticmethod
     def power(c1, c2):
-        if c2.imaginary != 0:
+        if c2.imaginary == 0:
             return pow_with_real_exp(c1, c2)
         else:
             return pow_with_complex_exp(c1, c2)
@@ -207,10 +214,10 @@ def pow_with_complex_exp(c1: Complex, c2: Complex):
 # r^(c + di) = (r^c)*(r^di)
 def new_modulo(modulo, real_exp, imaginary_exp):
     # r^c
-    rc = Complex(pow(modulo, real_exp), 0)
+    rc = Complex(pow(modulo.real, real_exp.real), 0)
 
     # r^(di) = e^(ln(r^d)i) = cos(ln(r^d)) + i*sin(ln(r^d))
-    n_arg = m.log(pow(modulo, imaginary_exp), m.e)  # ln(r^d)
+    n_arg = m.log(pow(modulo.real, imaginary_exp.imaginary), m.e)  # ln(r^d)
     rdi = Complex(m.cos(n_arg), m.sin(n_arg))
 
     # (r ^ c) * (r ^ di)
@@ -226,7 +233,7 @@ def new_modulo(modulo, real_exp, imaginary_exp):
 # e^((c + di)ti = (e^-(dt))*(e^(cti))
 def new_cis(c1_exponent, real_exp, imaginary_exp):
     # (e^-(dt))
-    edt = m.exp(Complex.mult(c1_exponent, imaginary_exp))
+    edt = Complex(m.exp(Complex.mult(c1_exponent, imaginary_exp).real), 0)
 
     # (e ^ (cti)) = cos(ct) + i*sin(ct)
     ct = Complex.mult(real_exp, imaginary_exp).imaginary
@@ -250,14 +257,8 @@ def pow_with_real_exp(c1, c2):
 
 # testing
 
-t1 = Complex("-3")
-t2 = Complex.div(t1, t1)
-t3 = Complex.div(t2, t1)
-t4 = Complex.div(t1, t3)
-print(t1.rect_to_euler())
-print(t2.rect_to_euler())
-print(t3.rect_to_euler())
-print(t4.rect_to_euler())
+t1 = Complex("i")
+print(Complex.power(t1, t1))
 
 
 
