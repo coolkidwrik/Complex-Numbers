@@ -45,7 +45,7 @@ class Complex (r.Real, i.Imaginary):
     def arg(self):
         real = self.real
         imaginary = self.imaginary
-        if real == 0:
+        if abs(real) < 1e-7:
             if imaginary < 0:
                 result = m.pi*(-1/2)
             else:
@@ -198,7 +198,7 @@ def euler_exponent(complex_number: Complex):
     return Complex(0, complex_number.arg().real)
 
 
-# helper for pow function if exponent is complex (in the form a + bi)
+# helper for pow function if exponent is complex (in the form c + di)
 def pow_with_complex_exp(c1: Complex, c2: Complex):
     modulo = c1.mod()  # r
     c1_exponent = euler_exponent(c1)  # ti
@@ -262,7 +262,20 @@ def pow_with_real_exp(c1: Complex, c2: Complex):
     arg = c1.arg()
     n_arg = Complex.mult(exp, arg).real
     n_mod = Complex(m.pow(modulo.real, exp.real), 0)
-    n_cis = Complex(m.cos(n_arg), m.sin(n_arg))
+    sin_n_arg = m.sin(n_arg)
+    cos_n_arg = m.cos(n_arg)
+    if abs(sin_n_arg) < 1e-7:
+        if cos_n_arg < 0:
+            n_cis = Complex(-1, 0)
+        else:
+            n_cis = Complex(1, 0)
+    elif abs(cos_n_arg) < 1e-7:
+        if sin_n_arg < 0:
+            n_cis = Complex(0, -1)
+        else:
+            n_cis = Complex(0, 1)
+    else:
+        n_cis = Complex(cos_n_arg, sin_n_arg)
     result = Complex.mult(n_mod, n_cis)
     return result
 
@@ -276,9 +289,9 @@ def pow_with_real_exp(c1: Complex, c2: Complex):
 
 # testing
 
-t1 = Complex("7 + 9i")
+t1 = Complex("i")
 
-t2 = Complex("2")
+t2 = Complex("-3")
 t3 = Complex.power(t1, t2)
 
 print(t3)
