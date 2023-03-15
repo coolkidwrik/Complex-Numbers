@@ -200,6 +200,7 @@ def euler_exponent(complex_number: Complex):
 
 # helper for pow function if exponent is complex (in the form c + di)
 def pow_with_complex_exp(c1: Complex, c2: Complex):
+    # !!! bug somewhere in this function
     modulo = c1.mod()  # r
     c1_exponent = euler_exponent(c1)  # ti
     real_exp = Complex(c2.real, 0)  # c
