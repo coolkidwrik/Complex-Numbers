@@ -17,7 +17,6 @@ class Imaginary(n.Number):
         # ( a * e^(i(pi/2)) )^(bi) = a * e^(i(pi/2) * bi)
         #                          = a * e^(i^2 * (b * pi/2))
         # ( a * e^(i(pi/2)) )^(bi) = a * e^(-b* pi/2)
-        pi_over_two = n.m.pi/2
         return r1 * n.m.exp(-1 * r2 * n.m.pi/2)
 
 

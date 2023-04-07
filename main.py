@@ -1,3 +1,3 @@
 import cmath as m
 
-print(pow(3+7j, 7+14j))
+print(pow(0.234 + 1.343j, 4.324 + 3.14j))

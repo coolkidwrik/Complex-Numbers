@@ -200,16 +200,15 @@ def euler_exponent(complex_number: Complex):
 
 # helper for pow function if exponent is complex (in the form c + di)
 def pow_with_complex_exp(c1: Complex, c2: Complex):
-    # !!! bug somewhere in this function
-    modulo = c1.mod()  # r
-    c1_exponent = euler_exponent(c1)  # ti
-    real_exp = Complex(c2.real, 0)  # c
-    imaginary_exp = Complex(0, c2.imaginary) # di
+    modulo = c1.mod()  # r for c1 = r * e^(ti)
+    c1_exponent = euler_exponent(c1)  # ti for c1 = r * e^(ti)
+    # real_exp = Complex(c2.real, 0)  # c for c2 = c + di
+    # imaginary_exp = Complex(0, c2.imaginary) # di for c2 = c + di
 
     # modulus
-    n_modulo = new_modulo(modulo, real_exp, imaginary_exp)
+    n_modulo = new_modulo(modulo, c2)
     # cis
-    n_cis = new_cis(c1_exponent, real_exp, imaginary_exp)
+    n_cis = new_cis(c1_exponent, c2)
     # result
     result = Complex.mult(n_modulo, n_cis)
     return result
@@ -222,12 +221,12 @@ def pow_with_complex_exp(c1: Complex, c2: Complex):
 # when raised to the power of c + di, we get (r^(c + di))*e^((c + di)ti)
 # this part of the code will focus on r^(c + di), which yields a complex number
 # r^(c + di) = (r^c)*(r^di)
-def new_modulo(modulo, real_exp, imaginary_exp):
+def new_modulo(modulo, exp):
     # r^c
-    rc = Complex(pow(modulo.real, real_exp.real), 0)
+    rc = Complex(pow(modulo.real, exp.real), 0)
 
     # r^(di) = e^(ln(r^d)i) = cos(ln(r^d)) + i*sin(ln(r^d))
-    n_arg = m.log(pow(modulo.real, imaginary_exp.imaginary), m.e)  # ln(r^d)
+    n_arg = m.log(pow(modulo.real, exp.imaginary), m.e)  # ln(r^d)
     rdi = Complex(m.cos(n_arg), m.sin(n_arg))
 
     # (r ^ c) * (r ^ di)
@@ -240,13 +239,13 @@ def new_modulo(modulo, real_exp, imaginary_exp):
 # ti is c1_exponent
 # when raised to the power of c + di, we get (r^(c + di))*e^((c + di)ti)
 # this part of the code will focus on e^((c + di)ti, which yields a complex number
-# e^((c + di)ti = (e^-(dt))*(e^(cti))
-def new_cis(c1_exponent, real_exp, imaginary_exp):
+# e^((c + di)ti) = (e^-(dt)) * (e^(cti))
+def new_cis(c1_exponent, exp):
     # (e^-(dt))
-    edt = Complex(m.exp(Complex.mult(c1_exponent, imaginary_exp).real), 0)
+    edt = Complex(m.exp(-1 * c1_exponent.imaginary * exp.imaginary), 0)
 
     # (e ^ (cti)) = cos(ct) + i*sin(ct)
-    ct = Complex.mult(real_exp, imaginary_exp).imaginary
+    ct = exp.real * c1_exponent.imaginary
     ecti = Complex(m.cos(ct), m.sin(ct))
 
     # (e^-(dt))*(e^(cti))
@@ -290,11 +289,10 @@ def pow_with_real_exp(c1: Complex, c2: Complex):
 
 # testing
 
-t1 = Complex("3 + 7i")
+t1 = Complex("0.234 + 1.343i")
 
-t2 = Complex("7 + 14i")
-t3 = Complex.power(t1, t1)
-
+t2 = Complex("4.324 + 3.14i")
+t3 = Complex.power(t1, t2)
 print(t3)
 
 
