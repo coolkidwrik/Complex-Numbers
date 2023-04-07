@@ -290,10 +290,10 @@ def pow_with_real_exp(c1: Complex, c2: Complex):
 
 # testing
 
-t1 = Complex("i")
+t1 = Complex("3 + 7i")
 
-t2 = Complex("-3")
-t3 = Complex.power(t1, t2)
+t2 = Complex("7 + 14i")
+t3 = Complex.power(t1, t1)
 
 print(t3)
 

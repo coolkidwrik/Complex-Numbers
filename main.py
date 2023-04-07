@@ -1,3 +1,3 @@
-import math as m
+import cmath as m
 
-print(m.gamma(1.2))
+print(pow(3+7j, 7+14j))

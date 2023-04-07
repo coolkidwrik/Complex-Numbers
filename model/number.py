@@ -18,6 +18,11 @@ class Number:
         assert r2 != 0, "Cannot divide by 0"
         return r1 / r2
 
+    @staticmethod
+    def power(r1, r2):
+        assert r1 != 0 and r2 != 0, "0^0 is undefined"
+        return m.pow(r1, r2)
+
     # raises r1 to the power of r2
     ## should work using maclaurin expansion to work for all real numbers
     ## (x + 1)^n = 1 + n(x+1)^(n-1) + n(n-1)(x+1)^(n-2) + n(n-1)(n-2)(x+1)^(n-3) + ...
