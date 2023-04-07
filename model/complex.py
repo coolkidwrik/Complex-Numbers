@@ -123,6 +123,22 @@ class Complex (r.Real, i.Imaginary):
         else:
             return pow_with_complex_exp(c1, c2)
 
+    #takes the sine of a complex number
+    @staticmethod
+    def sin(c1, c2):
+        pass
+
+
+    # takes the cosine of a complex number
+    @staticmethod
+    def cos(c1, c2):
+        pass
+
+    # takes the sine of a complex number
+    @staticmethod
+    def tan(c1, c2):
+        pass
+
 
 
 # helper methods
