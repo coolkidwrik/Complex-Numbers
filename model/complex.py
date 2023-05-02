@@ -41,7 +41,7 @@ class Complex (r.Real, i.Imaginary):
         complex_number = self.complex_to_string().split()
         return complex_number[1]
 
-    # returns the argument of a complex number
+    # returns the argument of a complex number, which is itself a complex number
     def arg(self):
         real = self.real
         imaginary = self.imaginary
@@ -74,7 +74,7 @@ class Complex (r.Real, i.Imaginary):
         else:
             return f"{modulo}e^{argument}i"
 
-    # returns a string representation of euler's form of the complex number
+    # returns a string representation of cis form of the complex number
     # in rectangular form
     def rect_to_cis(self):
         argument = complex_to_string(self.arg())
@@ -124,20 +124,60 @@ class Complex (r.Real, i.Imaginary):
             return pow_with_complex_exp(c1, c2)
 
     #takes the sine of a complex number
+    # using the complex definition of the sine function
+    # sin(c) = (e^(ic) - e^(-ic) )/2i
     @staticmethod
-    def sin(c1, c2):
-        pass
-
+    def sin(c):
+        # if the argument, "c", is real
+        if c.imaginary == 0:
+            return m.sin(c.real)
+        # if the argument, "c", is complex
+        else:
+            # c has an imaginary component
+            if c.real == 0:
+                # if c = ai where a is an arbitrary constant
+                it = i.Imaginary.mult(c.imaginary, i)
+                pass
+            else:
+                pass
 
     # takes the cosine of a complex number
+    # using the complex definition of of the sine function
+    # cos(t) = (e^(it) + e^(-it) )/2
     @staticmethod
-    def cos(c1, c2):
-        pass
+    def cos(c):
+        if c.imaginary == 0:
+            return m.cos(c.real)
+        else:
+            # c has a complex component
+            if c.real == 0:
+                # if c = ai where a is an arbitrary constant
 
-    # takes the sine of a complex number
+                #it = i * (ai) = -a
+                it = i.Imaginary.mult(c.imaginary, 1)
+                return (m.exp(it) + m.exp(-1 * it))/2
+            else:
+                # if c = a + bi where a and b are arbitrary constants
+                #
+                exp = Complex(0, 1)
+                # new_cis(c, exp)
+
+    # takes the tangent of a complex number
     @staticmethod
-    def tan(c1, c2):
-        pass
+    def tan(c):
+        return Complex.sin(c)/Complex.cos(c)
+
+    # takes in a complex number and returns the natural log of it.
+    # assumes the input is a complex number of the form: c = a + bi
+    # using euler's form, can be re-written as c = r * e^(it),
+    # where r is the mod and t is the argument of the number
+    # the goal: ln(a + bi) = ln(r * e^(it)) = ln(r) + it
+    @staticmethod
+    def natural_log(c):
+        real = m.log(c.mod().real, m.e)
+        imaginary = c.arg().real
+        return Complex(real, imaginary)
+
 
 
 
@@ -156,7 +196,7 @@ def string_to_complex(complex_number_string: str):
 
 
 # helper function for string_to_complex, if the input string is 1 distinct character
-def string_to_complex_one_arg(complex_number):
+def string_to_complex_one_arg(complex_number: str):
     if complex_number[0][-1] == 'i':
         if complex_number[0] == 'i':
             imaginary = 1
@@ -170,7 +210,7 @@ def string_to_complex_one_arg(complex_number):
 
 
 # helper function for string_to_complex, if the input string is 3 distinct characters
-def string_to_complex_three_arg(complex_number):
+def string_to_complex_three_arg(complex_number: str):
     real = float(complex_number[0])
     sign = complex_number[1]
     assert sign in ["+", "-"], f"\"{sign}\" is not valid, must be either \"+\" or \"-\""
@@ -210,6 +250,7 @@ def complex_to_string(complex_number: Complex):
 
 
 # returns the exponent of euler's form as a complex number
+# a + bi = r * e^(ti). returns t given 'a + bi'
 def euler_exponent(complex_number: Complex):
     return Complex(0, complex_number.arg().real)
 
@@ -249,7 +290,7 @@ def new_modulo(modulo, exp):
     return Complex.mult(rc, rdi)
 
 
-# helper for pow_with_complex_exp()
+# helper for pow_with_complex_exp() and sin and cos
 # the following code works as follows:
 # a + bi = r*e^ti where r is modulus and t is the argument.
 # ti is c1_exponent
@@ -305,10 +346,12 @@ def pow_with_real_exp(c1: Complex, c2: Complex):
 
 # testing
 
-t1 = Complex("0.234 + 1.343i")
+t1 = Complex("1 + i")
 
-t2 = Complex("4.324 + 3.14i")
-t3 = Complex.power(t1, t2)
+t2 = Complex("-i")
+t3 = Complex.add(t1, t2)
+print(Complex.natural_log(t1))
+print(t2)
 print(t3)
 
 
