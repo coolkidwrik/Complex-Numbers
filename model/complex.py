@@ -142,7 +142,7 @@ class Complex (r.Real, i.Imaginary):
                 pass
 
     # takes the cosine of a complex number
-    # using the complex definition of of the sine function
+    # using the complex definition of the sine function
     # cos(t) = (e^(it) + e^(-it) )/2
     @staticmethod
     def cos(c):
@@ -166,6 +166,17 @@ class Complex (r.Real, i.Imaginary):
     @staticmethod
     def tan(c):
         return Complex.sin(c)/Complex.cos(c)
+
+    # takes in a complex number and returns the e to the power of that number.
+    # assumes the input is a complex number of the form: c = a + bi
+    # e^c = (e^a) * e^(bi)
+    @staticmethod
+    def exp(c):
+        ea = m.exp(c.real) # e^a
+
+        # e^(bi) = cos(b) + i*sin(b)
+        # ebi = m.co
+        pass
 
     # takes in a complex number and returns the natural log of it.
     # assumes the input is a complex number of the form: c = a + bi
@@ -259,8 +270,6 @@ def euler_exponent(complex_number: Complex):
 def pow_with_complex_exp(c1: Complex, c2: Complex):
     modulo = c1.mod()  # r for c1 = r * e^(ti)
     c1_exponent = euler_exponent(c1)  # ti for c1 = r * e^(ti)
-    # real_exp = Complex(c2.real, 0)  # c for c2 = c + di
-    # imaginary_exp = Complex(0, c2.imaginary) # di for c2 = c + di
 
     # modulus
     n_modulo = new_modulo(modulo, c2)
@@ -317,27 +326,33 @@ def pow_with_real_exp(c1: Complex, c2: Complex):
     exp = c2
     modulo = c1.mod()
     arg = c1.arg()
-    n_arg = Complex.mult(exp, arg).real
+    n_arg = arg.real * c2.real
     n_mod = Complex(m.pow(modulo.real, exp.real), 0)
-    sin_n_arg = m.sin(n_arg)
-    cos_n_arg = m.cos(n_arg)
-    if abs(sin_n_arg) < 1e-7:
-        if cos_n_arg < 0:
-            n_cis = Complex(-1, 0)
-        else:
-            n_cis = Complex(1, 0)
-    elif abs(cos_n_arg) < 1e-7:
-        if sin_n_arg < 0:
-            n_cis = Complex(0, -1)
-        else:
-            n_cis = Complex(0, 1)
-    else:
-        n_cis = Complex(cos_n_arg, sin_n_arg)
-    result = Complex.mult(n_mod, n_cis)
+    result = cis_correction(n_mod, n_arg)
     return result
 
 
-
+# sine and cosine functions, for cis form of complex numbers,
+# result in floating point errors when the argument is around
+# 0, pi/2, -pi/2, or pi/-pi
+# this code takes in the modulus of the complex number, and the argument, and returns
+# the complex number after floating point error corrections
+def cis_correction(n_mod: Complex, n_arg: float):
+    sin_n_arg = m.sin(n_arg)
+    cos_n_arg = m.cos(n_arg)
+    if abs(sin_n_arg) < 1e-7: # when the argument is 0 or pi or -pi
+        if cos_n_arg < 0:
+            n_cis = Complex(-1, 0) # when the argument is pi or -pi
+        else:
+            n_cis = Complex(1, 0) # when the argument is 0
+    elif abs(cos_n_arg) < 1e-7: # when the argument is pi/2 or -pi/2
+        if sin_n_arg < 0:
+            n_cis = Complex(0, -1) # when the argument is -pi/2
+        else:
+            n_cis = Complex(0, 1) # when the argument is pi/2
+    else:
+        n_cis = Complex(cos_n_arg, sin_n_arg)
+    return Complex.mult(n_mod, n_cis)
 
 
 # print the complex number String onto console
@@ -346,13 +361,15 @@ def pow_with_real_exp(c1: Complex, c2: Complex):
 
 # testing
 
-t1 = Complex("1 + i")
-
-t2 = Complex("-i")
-t3 = Complex.add(t1, t2)
-print(Complex.natural_log(t1))
+t1 = Complex("0.7071067811865475 + 0.7071067811865475i")
+# t2 = Complex(str(m.pi/2))
+t2 = Complex("5")
+t3 = Complex.power(t1, t2)
+print(t1)
 print(t2)
 print(t3)
+
+print(1/m.sqrt(2))
 
 
 #print(Complex.power(t1, t1))

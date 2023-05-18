@@ -1,4 +1,5 @@
 import cmath as m
 
-t = 1 + 1j
-print(m.log(t, m.e))
+t1 = 0.7071067811865475 + 0.7071067811865475j
+t2 = 5
+print(t1 ** t2)
