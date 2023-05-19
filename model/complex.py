@@ -146,6 +146,29 @@ class Complex (r.Real, i.Imaginary):
         cos_c = Complex.cos(c)
         return Complex.div(sin_c, cos_c)
 
+    # takes the hyperbolic-sine of a complex number, t
+    # input is in the form t = a + bi
+    # using the relation between hyperbolic and regular trig functions
+    # sinh(t) = sin(it)/i
+    @staticmethod
+    def sinh(c):
+        return hyperbolic_trig(Complex.sin, Complex.div, c)
+
+    # takes the hyperbolic-cosine of a complex number, t
+    # input is in the form t = a + bi
+    # using the relation between hyperbolic and regular trig functions
+    # cosh(t) = cos(it)
+    @staticmethod
+    def cosh(c):
+        return hyperbolic_trig(Complex.cos, return_first, c)
+
+    # takes the hyperbolic-tangent of a complex number
+    @staticmethod
+    def tanh(c):
+        sinh_c = Complex.sinh(c)
+        cosh_c = Complex.cosh(c)
+        return Complex.div(sinh_c, cosh_c)
+
     # takes in a complex number and returns the e to the power of that number.
     # assumes the input is a complex number of the form: c = a + bi
     # e^c = (e^a) * e^(bi)
@@ -271,6 +294,19 @@ def trig(func, c: Complex, denominator: str):
     numerator = func(eic, neg_eic)
     return Complex.div(numerator, denominator)
 
+# helper function for sinh and cosh
+# abstracts away most of the code required for sinh and cosh
+def hyperbolic_trig(func1, func2, c: Complex):
+    iota = Complex("i")
+    it = Complex.mult(iota, c)
+    result = func1(it)
+    return func2(result, iota)
+
+# helper function for hyperbolic_trig when performing cosh
+# returns first argument
+def return_first(result, arbitrary):
+    return result
+
 
 # returns the exponent of euler's form as a complex number
 # a + bi = r * e^(ti). returns t given 'a + bi'
@@ -376,7 +412,7 @@ def cis_correction(n_mod: Complex, n_arg: float):
 t1 = Complex("7 + 4i")
 # t2 = Complex(str(m.pi/2))
 t2 = Complex("13 + 17i")
-t3 = Complex.tan(t1)
+t3 = Complex.tanh(t2)
 print(t1)
 print(t2)
 print(t3)
