@@ -61,6 +61,16 @@ class Complex (r.Real, i.Imaginary):
 
     # returns the modulus of a complex number, which is itself a complex number
     def mod(self):
+        # assume complex number in question, c, is in the form: c = a + bi
+        # modulus of c is sqrt(a^2 + b^2)
+        # therefore result = m.sqrt(pow(self.real, 2) + pow(self.imaginary, 2))
+        # or
+        # c * c_conjugate = (a + bi) * (a - bi)
+        #                 = a^2 - (bi)^2
+        #                 = a^2 + b^2          = modulus^2
+        # sqrt(c * c_conjugate) = modulus
+        # this version doesn't use math.power
+
         result = m.sqrt(pow(self.real, 2) + pow(self.imaginary, 2))
         return Complex(result, 0)
 
@@ -131,6 +141,10 @@ class Complex (r.Real, i.Imaginary):
         exp = Complex.div(one, c2)
         return Complex.power(c1, exp)
 
+
+    # trig functions
+    # regular trig functions
+
     #takes the sine of a complex number, t
     # input is in the form t = a + bi
     # using the complex definition of the sine function
@@ -148,11 +162,40 @@ class Complex (r.Real, i.Imaginary):
         return trig(Complex.add, c, "2")
 
     # takes the tangent of a complex number
+    # input is in the form c = a + bi
     @staticmethod
     def tan(c):
         sin_c = Complex.sin(c)
         cos_c = Complex.cos(c)
         return Complex.div(sin_c, cos_c)
+
+    # reciprocal trig functions
+
+    # takes the cosine of a complex number
+    # input is in the form c = a + bi
+    # will use the sine function
+    # csc(c) = 1/sin(c)
+    @staticmethod
+    def csc(c):
+        return reciprocal_trig(Complex.sin, c)
+
+    # takes the cosine of a complex number
+    # input is in the form c = a + bi
+    # will use the cosine function
+    # sec(c) = 1/cos(c)
+    @staticmethod
+    def sec(c):
+        return reciprocal_trig(Complex.cos, c)
+
+    # takes the cotangent of a complex number
+    # input is in the form c = a + bi
+    @staticmethod
+    def cot(c):
+        sin_c = Complex.sin(c)
+        cos_c = Complex.cos(c)
+        return Complex.div(cos_c, sin_c)
+
+    # hyperbolic trig functions
 
     # takes the hyperbolic-sine of a complex number, t
     # input is in the form t = a + bi
@@ -176,6 +219,26 @@ class Complex (r.Real, i.Imaginary):
         sinh_c = Complex.sinh(c)
         cosh_c = Complex.cosh(c)
         return Complex.div(sinh_c, cosh_c)
+
+    # inverse trig functions
+
+    # takes the arcsin of a complex number, c
+    # where c is in the form: c = a + bi
+    @staticmethod
+    def arcsin(c):
+        pass
+
+    # takes the arccos of a complex number, c
+    # where c is in the form: c = a + bi
+    @staticmethod
+    def arccos(c):
+        pass
+
+    # takes the arctan of a complex number, c
+    # where c is in the form: c = a + bi
+    @staticmethod
+    def arctan(c):
+        pass
 
     # takes in a complex number and returns the e to the power of that number.
     # assumes the input is a complex number of the form: c = a + bi
@@ -214,6 +277,13 @@ class Complex (r.Real, i.Imaginary):
         ln_b = Complex.natural_log(b)
         result = Complex.div(ln_c, ln_b)
         return result
+
+    # takes the gamma of a complex number, c
+    # where c is in the form: c = a + bi
+    # details for this given in https://www.youtube.com/watch?v=vsdMYADQRkM&ab_channel=FlammableMaths
+    @staticmethod
+    def gamma(c):
+        pass
 
 
 
@@ -285,7 +355,7 @@ def complex_to_string(complex_number: Complex):
         else:
             return f"{real} + {imaginary}i"
 
-# helper function for sine and cosine
+# helper, higher-order function for sine and cosine
 # abstracts away most of the code required for sine and cosine
 def trig(func, c: Complex, denominator: str):
     iota = Complex("i")
@@ -302,7 +372,14 @@ def trig(func, c: Complex, denominator: str):
     numerator = func(eic, neg_eic)
     return Complex.div(numerator, denominator)
 
-# helper function for sinh and cosh
+# helper, higher-order function for co-secant and secant
+# abstracts away most of the code required for co-secant and secant
+def reciprocal_trig(func, c: Complex):
+    numerator = Complex("1")
+    denominator = func(c)
+    return Complex.div(numerator, denominator)
+
+# helper, higher-order function for sinh and cosh
 # abstracts away most of the code required for sinh and cosh
 def hyperbolic_trig(func1, func2, c: Complex):
     iota = Complex("i")
