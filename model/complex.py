@@ -172,11 +172,11 @@ class Complex (r.Real, i.Imaginary):
     # e^c = (e^a) * e^(bi)
     @staticmethod
     def exp(c):
-        ea = m.exp(c.real) # e^a
+        n_mod = Complex(m.exp(c.real), 0) # e^a
 
         # e^(bi) = cos(b) + i*sin(b)
-        # ebi = m.co
-        pass
+        n_arg = c.imaginary
+        return cis_correction(n_mod, n_arg)
 
     # takes in a complex number and returns the natural log of it.
     # assumes the input is a complex number of the form: c = a + bi
@@ -364,7 +364,7 @@ def cis_correction(n_mod: Complex, n_arg: float):
 t1 = Complex("7 + 4i")
 # t2 = Complex(str(m.pi/2))
 t2 = Complex("13 + 17i")
-t3 = Complex.power(t1, t2)
+t3 = Complex.exp(t1)
 print(t1)
 print(t2)
 print(t3)
