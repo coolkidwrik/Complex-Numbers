@@ -1,5 +1,5 @@
 import cmath as m
 
-t1 = 7 + 4j
-t2 = 13+17j
-print(m.acos(t1))
+t1 = 1 + 1j
+t2 = m.pi*t1
+print(m.sin(t2))

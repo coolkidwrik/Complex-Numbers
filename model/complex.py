@@ -314,9 +314,17 @@ class Complex (r.Real, i.Imaginary):
     # hence, to calculate Γ(c):
     # Γ(c) = π/(sin(πc) * Γ(1 - c))
     # uses an accumulator to keep track of the number of iterations
+    # c cannot be an integer
     @staticmethod
     def gamma(c):
-        result = gamma_recursive(c, 0)
+        if c.imaginary == 0:
+            try:
+                return m.gamma(c.real)
+            except ValueError as e:
+                print(e)
+        else:
+            limit = 100
+        result = gamma_recursive(c, 1, limit)
         return result
 
 
@@ -506,14 +514,15 @@ def pow_with_real_exp(c1: Complex, c2: Complex):
 # this code takes in the modulus of the complex number, and the argument, and returns
 # the complex number after floating point error corrections
 def cis_correction(n_mod: Complex, n_arg: float):
+    error = 1e-15
     sin_n_arg = m.sin(n_arg)
     cos_n_arg = m.cos(n_arg)
-    if abs(sin_n_arg) < 1e-7: # when the argument is 0 or pi or -pi
+    if abs(sin_n_arg) < error: # when the argument is 0 or pi or -pi
         if cos_n_arg < 0:
             n_cis = Complex(-1, 0) # when the argument is pi or -pi
         else:
             n_cis = Complex(1, 0) # when the argument is 0
-    elif abs(cos_n_arg) < 1e-7: # when the argument is pi/2 or -pi/2
+    elif abs(cos_n_arg) < error: # when the argument is pi/2 or -pi/2
         if sin_n_arg < 0:
             n_cis = Complex(0, -1) # when the argument is -pi/2
         else:
@@ -528,35 +537,38 @@ pi = Complex(str(m.pi)) # pi
 one = Complex("1") # 1
 
 # recursive helper for the gamma function
-def gamma_recursive(c: Complex, accumulator: int):
+def gamma_recursive(c: Complex, accumulator: int, limit: int):
     # !!! bug in this function
-    if accumulator == 500:
+    if accumulator == limit:
         return one
     else:
         accumulator += 1
         # Γ(c) = π/(sin(πc) * Γ(1 - c))
-        pic = Complex.mult(pi, c)                              # πc
-        sin_pic = Complex.sin(pic)                             # sin(πc)
-        new_arg = Complex.sub(one, c)                          # 1 - c
-        gamma_new_arg = gamma_recursive(new_arg, accumulator)  # Γ(1 - c), recursive step
-        denominator = Complex.mult(gamma_new_arg, sin_pic)     # sin(πc) * Γ(1 - c)
+        pic = Complex.mult(pi, c)                                     # πc
+        sin_pic = Complex.sin(pic)                                    # sin(πc)
+        new_arg = Complex.sub(one, c)                                 # 1 - c
+        gamma_new_arg = gamma_recursive(new_arg, accumulator, limit)  # Γ(1 - c), recursive step
+        denominator = Complex.mult(gamma_new_arg, sin_pic)            # sin(πc) * Γ(1 - c)
         result = Complex.div(pi, denominator)
         return result
 
 
-# print the complex number String onto console
-# def print_complex(c):
-#     print(complex_to_string(c))
-
 # testing
-
 t1 = Complex("1 + i")
-# t2 = Complex(str(m.pi/2))
-t2 = Complex("13 + 17i")
+t2 = Complex("3 + 4i")
 t3 = Complex.gamma(t1)      # i! = 0.498015668 - 0.154949828i
-print(t1)
-print(t2)
+# print(t1)
+# print(t2)
 print(t3)
+
+# t4 = Complex("0")
+# t5 = Complex(str(m.pi/2))
+# print(Complex.sin(t4))
+# print(Complex.sin(t5))
+# print(Complex.cos(t4))
+# print(Complex.cos(t5))
+# print(Complex.sin(pi))
+# print(Complex.cos(pi))
 
 
 #print(Complex.power(t1, t1))
