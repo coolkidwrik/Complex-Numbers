@@ -289,14 +289,14 @@ def pow_with_complex_exp(c1: Complex, c2: Complex):
 # r^(c + di) = (r^c)*(r^di)
 def new_modulo(modulo, exp):
     # r^c
-    rc = Complex(pow(modulo.real, exp.real), 0)
+    n_mod = Complex(pow(modulo.real, exp.real), 0)
 
     # r^(di) = e^(ln(r^d)i) = cos(ln(r^d)) + i*sin(ln(r^d))
     n_arg = m.log(pow(modulo.real, exp.imaginary), m.e)  # ln(r^d)
-    rdi = Complex(m.cos(n_arg), m.sin(n_arg))
+    # rdi = Complex(m.cos(n_arg), m.sin(n_arg))
 
     # (r ^ c) * (r ^ di)
-    return Complex.mult(rc, rdi)
+    return cis_correction(n_mod, n_arg)
 
 
 # helper for pow_with_complex_exp() and sin and cos
@@ -308,14 +308,14 @@ def new_modulo(modulo, exp):
 # e^((c + di)ti) = (e^-(dt)) * (e^(cti))
 def new_cis(c1_exponent, exp):
     # (e^-(dt))
-    edt = Complex(m.exp(-1 * c1_exponent.imaginary * exp.imaginary), 0)
+    n_mod = Complex(m.exp(-1 * c1_exponent.imaginary * exp.imaginary), 0)
 
     # (e ^ (cti)) = cos(ct) + i*sin(ct)
-    ct = exp.real * c1_exponent.imaginary
-    ecti = Complex(m.cos(ct), m.sin(ct))
+    n_arg = exp.real * c1_exponent.imaginary # ct
+    # ecti = Complex(m.cos(ct), m.sin(ct))
 
     # (e^-(dt))*(e^(cti))
-    return Complex.mult(edt, ecti)
+    return cis_correction(n_mod, n_arg)
 
 
 # helper for pow function if exponent is real
@@ -361,9 +361,9 @@ def cis_correction(n_mod: Complex, n_arg: float):
 
 # testing
 
-t1 = Complex("0.7071067811865475 + 0.7071067811865475i")
+t1 = Complex("7 + 4i")
 # t2 = Complex(str(m.pi/2))
-t2 = Complex("5")
+t2 = Complex("13 + 17i")
 t3 = Complex.power(t1, t2)
 print(t1)
 print(t2)
