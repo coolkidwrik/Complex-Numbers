@@ -123,6 +123,14 @@ class Complex (r.Real, i.Imaginary):
         else:
             return pow_with_complex_exp(c1, c2)
 
+    # take the c2-th root of c1
+    # input expression looks like (a + bi)^(1/(c + di))
+    @staticmethod
+    def root(c1, c2):
+        one = Complex("1")
+        exp = Complex.div(one, c2)
+        return Complex.power(c1, exp)
+
     #takes the sine of a complex number, t
     # input is in the form t = a + bi
     # using the complex definition of the sine function
@@ -412,7 +420,7 @@ def cis_correction(n_mod: Complex, n_arg: float):
 t1 = Complex("7 + 4i")
 # t2 = Complex(str(m.pi/2))
 t2 = Complex("13 + 17i")
-t3 = Complex.tanh(t2)
+t3 = Complex.root(t1, t2)
 print(t1)
 print(t2)
 print(t3)
