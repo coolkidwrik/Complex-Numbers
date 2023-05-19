@@ -141,11 +141,48 @@ class Complex (r.Real, i.Imaginary):
         exp = Complex.div(one, c2)
         return Complex.power(c1, exp)
 
+    # takes in a complex number and returns the e to the power of that number.
+    # assumes the input is a complex number of the form: c = a + bi
+    # e^c = (e^a) * e^(bi)
+    @staticmethod
+    def exp(c):
+        n_mod = Complex(m.exp(c.real), 0) # e^a
+
+        # e^(bi) = cos(b) + i*sin(b)
+        n_arg = c.imaginary
+        return cis_correction(n_mod, n_arg)
+
+    # takes in a complex number and returns the natural log of the number.
+    # assumes the input is a complex number of the form: c = a + bi
+    # using euler's form, can be re-written as c = r * e^(it),
+    # where r is the mod and t is the argument of the number
+    # the goal: ln(a + bi) = ln(r * e^(it)) = ln(r) + it
+    @staticmethod
+    def natural_log(c):
+        real = m.log(c.mod().real, m.e)
+        imaginary = c.arg().real
+        return Complex(real, imaginary)
+
+    # takes in a complex number and a base, and returns the log of the number.
+    # assumes both inputs are a complex number of the form: c or b = a + bi
+    # will utilize the natural log function made as follows:
+    # result we want is y = log_b(c), where log_b means log in the base given
+    # b^y = c
+    # ln(b^y) = ln(c)
+    # y*ln(b) = ln(c)
+    # y = ln(c)/ln(b)
+    # therefore log_b(c) = ln(c)/ln(b)
+    @staticmethod
+    def log(c, b):
+        ln_c = Complex.natural_log(c)
+        ln_b = Complex.natural_log(b)
+        result = Complex.div(ln_c, ln_b)
+        return result
 
     # trig functions
     # regular trig functions
 
-    #takes the sine of a complex number, t
+    # takes the sine of a complex number, t
     # input is in the form t = a + bi
     # using the complex definition of the sine function
     # sin(t) = (e^(it) - e^(-it) )/2i
@@ -224,59 +261,50 @@ class Complex (r.Real, i.Imaginary):
 
     # takes the arcsin of a complex number, c
     # where c is in the form: c = a + bi
+    # use the principal branch of the natural log for the complex definition
+    # arcsin(c) = ln(ic + sqrt(1-c^2) )/i
     @staticmethod
     def arcsin(c):
-        pass
+        iota = Complex("i")  # i  # denominator
+        one = Complex("1")  # 1
+        two = Complex("2")  # 2
+
+        # numerator
+        ic = Complex.mult(c, iota)  # ic
+        c_squared = Complex.power(c, two)  # c^2
+        diff = Complex.sub(one, c_squared)  # 1 - c^2
+        sqrt = Complex.root(diff, two)  # sqrt(1 - c^2)
+        summ = Complex.add(ic, sqrt)  # ic + sqrt(1 - c^2)
+        numerator = Complex.natural_log(summ)  # ln(ic + sqrt(1 - c^2))
+
+        result = Complex.div(numerator, iota)
+        return result
 
     # takes the arccos of a complex number, c
     # where c is in the form: c = a + bi
+    # use the principal branch of the natural log for the complex definition
+    # arccos(c) = ln(c + sqrt(c^2 - 1) )/i
     @staticmethod
     def arccos(c):
-        pass
+        iota = Complex("i")  # i  # denominator
+        one = Complex("1")  # 1
+        two = Complex("2")  # 2
+
+        # numerator
+        c_squared = Complex.power(c, two)  # c^2
+        diff = Complex.sub(c_squared, one)  # c^2 - 1
+        sqrt = Complex.root(diff, two)  # sqrt(c^2 - 1)
+        summ = Complex.add(c, sqrt)  # c + sqrt(c^2 - 1)
+        numerator = Complex.natural_log(summ)  # ln(c + sqrt(c^2 - 1))
+
+        result = Complex.div(numerator, iota)
+        return result
 
     # takes the arctan of a complex number, c
     # where c is in the form: c = a + bi
     @staticmethod
     def arctan(c):
         pass
-
-    # takes in a complex number and returns the e to the power of that number.
-    # assumes the input is a complex number of the form: c = a + bi
-    # e^c = (e^a) * e^(bi)
-    @staticmethod
-    def exp(c):
-        n_mod = Complex(m.exp(c.real), 0) # e^a
-
-        # e^(bi) = cos(b) + i*sin(b)
-        n_arg = c.imaginary
-        return cis_correction(n_mod, n_arg)
-
-    # takes in a complex number and returns the natural log of the number.
-    # assumes the input is a complex number of the form: c = a + bi
-    # using euler's form, can be re-written as c = r * e^(it),
-    # where r is the mod and t is the argument of the number
-    # the goal: ln(a + bi) = ln(r * e^(it)) = ln(r) + it
-    @staticmethod
-    def natural_log(c):
-        real = m.log(c.mod().real, m.e)
-        imaginary = c.arg().real
-        return Complex(real, imaginary)
-
-    # takes in a complex number and a base, and returns the log of the number.
-    # assumes both inputs are a complex number of the form: c or b = a + bi
-    # will utilize the natural log function made as follows:
-    # result we want is y = log_b(c), where log_b means log in the base given
-    # b^y = c
-    # ln(b^y) = ln(c)
-    # y*ln(b) = ln(c)
-    # y = ln(c)/ln(b)
-    # therefore log_b(c) = ln(c)/ln(b)
-    @staticmethod
-    def log(c, b):
-        ln_c = Complex.natural_log(c)
-        ln_b = Complex.natural_log(b)
-        result = Complex.div(ln_c, ln_b)
-        return result
 
     # takes the gamma of a complex number, c
     # where c is in the form: c = a + bi
@@ -497,7 +525,7 @@ def cis_correction(n_mod: Complex, n_arg: float):
 t1 = Complex("7 + 4i")
 # t2 = Complex(str(m.pi/2))
 t2 = Complex("13 + 17i")
-t3 = Complex.root(t1, t2)
+t3 = Complex.arccos(t1)
 print(t1)
 print(t2)
 print(t3)
