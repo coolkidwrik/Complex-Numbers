@@ -38,7 +38,7 @@ class Complex (r.Real, i.Imaginary):
 
     # gets the sign of the imaginary component
     def get_sign(self):
-        complex_number = self.complex_to_string().split()
+        complex_number = complex_to_string(self).split()
         return complex_number[1]
 
     # returns the argument of a complex number, which is itself a complex number
@@ -123,52 +123,28 @@ class Complex (r.Real, i.Imaginary):
         else:
             return pow_with_complex_exp(c1, c2)
 
-    #takes the sine of a complex number
+    #takes the sine of a complex number, t
+    # input is in the form t = a + bi
     # using the complex definition of the sine function
-    # sin(c) = (e^(ic) - e^(-ic) )/2i
+    # sin(t) = (e^(it) - e^(-it) )/2i
     @staticmethod
     def sin(c):
-        # if the argument, "c", is real
-        if c.imaginary == 0:
-            return m.sin(c.real)
-        # if the argument, "c", is complex
-        else:
-            # c has an imaginary component
-            if c.real == 0:
-                # if c = ai where a is an arbitrary constant
-                it = i.Imaginary.mult(c.imaginary, i)
-                pass
-            else:
-                pass
+        return trig(Complex.sub, c, "2i")
 
     # takes the cosine of a complex number
-    # using the complex definition of the sine function
+    # input is in the form t = a + bi
+    # using the complex definition of the cosine function
     # cos(t) = (e^(it) + e^(-it) )/2
-    # where t is in the form: t = a + bi
     @staticmethod
     def cos(c):
-        if c.imaginary == 0:
-            return m.cos(c.real)
-        else:
-            # c has a complex component
-            if c.real == 0:
-                # if c = ai where a is an arbitrary constant
-
-                #it = i * (ai) = -a
-                it = i.Imaginary.mult(c.imaginary, 1)
-                return (m.exp(it) + m.exp(-1 * it))/2
-            else:
-                # if c = a + bi where a and b are arbitrary constants
-                #
-                exp = Complex(0, 1)
-                # new_cis(c, exp)
+        return trig(Complex.add, c, "2")
 
     # takes the tangent of a complex number
     @staticmethod
     def tan(c):
         sin_c = Complex.sin(c)
         cos_c = Complex.cos(c)
-        return sin_c/cos_c
+        return Complex.div(sin_c, cos_c)
 
     # takes in a complex number and returns the e to the power of that number.
     # assumes the input is a complex number of the form: c = a + bi
@@ -278,6 +254,23 @@ def complex_to_string(complex_number: Complex):
         else:
             return f"{real} + {imaginary}i"
 
+# helper function for sine and cosine
+# abstracts away most of the code required for sine and cosine
+def trig(func, c: Complex, denominator: str):
+    iota = Complex("i")
+    neg_iota = Complex("-i")
+    denominator = Complex(denominator)
+    ic = Complex.mult(iota, c)
+    neg_ic = Complex.mult(neg_iota, c)
+
+    # e^(ic)
+    eic = Complex.exp(ic)
+    # e^(-ic)
+    neg_eic = Complex.exp(neg_ic)
+
+    numerator = func(eic, neg_eic)
+    return Complex.div(numerator, denominator)
+
 
 # returns the exponent of euler's form as a complex number
 # a + bi = r * e^(ti). returns t given 'a + bi'
@@ -383,7 +376,7 @@ def cis_correction(n_mod: Complex, n_arg: float):
 t1 = Complex("7 + 4i")
 # t2 = Complex(str(m.pi/2))
 t2 = Complex("13 + 17i")
-t3 = Complex.log(t1, t2)
+t3 = Complex.tan(t1)
 print(t1)
 print(t2)
 print(t3)
