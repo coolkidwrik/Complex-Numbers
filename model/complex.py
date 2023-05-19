@@ -144,6 +144,7 @@ class Complex (r.Real, i.Imaginary):
     # takes the cosine of a complex number
     # using the complex definition of the sine function
     # cos(t) = (e^(it) + e^(-it) )/2
+    # where t is in the form: t = a + bi
     @staticmethod
     def cos(c):
         if c.imaginary == 0:
@@ -165,7 +166,9 @@ class Complex (r.Real, i.Imaginary):
     # takes the tangent of a complex number
     @staticmethod
     def tan(c):
-        return Complex.sin(c)/Complex.cos(c)
+        sin_c = Complex.sin(c)
+        cos_c = Complex.cos(c)
+        return sin_c/cos_c
 
     # takes in a complex number and returns the e to the power of that number.
     # assumes the input is a complex number of the form: c = a + bi
@@ -178,7 +181,7 @@ class Complex (r.Real, i.Imaginary):
         n_arg = c.imaginary
         return cis_correction(n_mod, n_arg)
 
-    # takes in a complex number and returns the natural log of it.
+    # takes in a complex number and returns the natural log of the number.
     # assumes the input is a complex number of the form: c = a + bi
     # using euler's form, can be re-written as c = r * e^(it),
     # where r is the mod and t is the argument of the number
@@ -188,6 +191,22 @@ class Complex (r.Real, i.Imaginary):
         real = m.log(c.mod().real, m.e)
         imaginary = c.arg().real
         return Complex(real, imaginary)
+
+    # takes in a complex number and a base, and returns the log of the number.
+    # assumes both inputs are a complex number of the form: c or b = a + bi
+    # will utilize the natural log function made as follows:
+    # result we want is y = log_b(c), where log_b means log in the base given
+    # b^y = c
+    # ln(b^y) = ln(c)
+    # y*ln(b) = ln(c)
+    # y = ln(c)/ln(b)
+    # therefore log_b(c) = ln(c)/ln(b)
+    @staticmethod
+    def log(c, b):
+        ln_c = Complex.natural_log(c)
+        ln_b = Complex.natural_log(b)
+        result = Complex.div(ln_c, ln_b)
+        return result
 
 
 
@@ -207,7 +226,7 @@ def string_to_complex(complex_number_string: str):
 
 
 # helper function for string_to_complex, if the input string is 1 distinct character
-def string_to_complex_one_arg(complex_number: str):
+def string_to_complex_one_arg(complex_number: list[str]):
     if complex_number[0][-1] == 'i':
         if complex_number[0] == 'i':
             imaginary = 1
@@ -221,7 +240,7 @@ def string_to_complex_one_arg(complex_number: str):
 
 
 # helper function for string_to_complex, if the input string is 3 distinct characters
-def string_to_complex_three_arg(complex_number: str):
+def string_to_complex_three_arg(complex_number: list[str]):
     real = float(complex_number[0])
     sign = complex_number[1]
     assert sign in ["+", "-"], f"\"{sign}\" is not valid, must be either \"+\" or \"-\""
@@ -364,7 +383,7 @@ def cis_correction(n_mod: Complex, n_arg: float):
 t1 = Complex("7 + 4i")
 # t2 = Complex(str(m.pi/2))
 t2 = Complex("13 + 17i")
-t3 = Complex.exp(t1)
+t3 = Complex.log(t1, t2)
 print(t1)
 print(t2)
 print(t3)

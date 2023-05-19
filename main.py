@@ -2,4 +2,4 @@ import cmath as m
 
 t1 = 7 + 4j
 t2 = 13+17j
-print(m.exp(t1))
+print(m.log(t1, t2))
