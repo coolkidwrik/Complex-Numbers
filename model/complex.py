@@ -308,10 +308,17 @@ class Complex (r.Real, i.Imaginary):
 
     # takes the gamma of a complex number, c
     # where c is in the form: c = a + bi
-    # details for this given in https://www.youtube.com/watch?v=vsdMYADQRkM&ab_channel=FlammableMaths
+    # utilizes the Euler reflection formula recursively to calculate a value
+    # Euler reflection formula is as follows:
+    # Γ(c) * Γ(1 - c) = π/sin(πc)
+    # hence, to calculate Γ(c):
+    # Γ(c) = π/(sin(πc) * Γ(1 - c))
+    # uses an accumulator to keep track of the number of iterations
     @staticmethod
     def gamma(c):
-        pass
+        result = gamma_recursive(c, 0)
+        return result
+
 
 
 
@@ -516,21 +523,40 @@ def cis_correction(n_mod: Complex, n_arg: float):
     return Complex.mult(n_mod, n_cis)
 
 
+# constant for gamma_recursive function
+pi = Complex(str(m.pi)) # pi
+one = Complex("1") # 1
+
+# recursive helper for the gamma function
+def gamma_recursive(c: Complex, accumulator: int):
+    # !!! bug in this function
+    if accumulator == 500:
+        return one
+    else:
+        accumulator += 1
+        # Γ(c) = π/(sin(πc) * Γ(1 - c))
+        pic = Complex.mult(pi, c)                              # πc
+        sin_pic = Complex.sin(pic)                             # sin(πc)
+        new_arg = Complex.sub(one, c)                          # 1 - c
+        gamma_new_arg = gamma_recursive(new_arg, accumulator)  # Γ(1 - c), recursive step
+        denominator = Complex.mult(gamma_new_arg, sin_pic)     # sin(πc) * Γ(1 - c)
+        result = Complex.div(pi, denominator)
+        return result
+
+
 # print the complex number String onto console
 # def print_complex(c):
 #     print(complex_to_string(c))
 
 # testing
 
-t1 = Complex("7 + 4i")
+t1 = Complex("1 + i")
 # t2 = Complex(str(m.pi/2))
 t2 = Complex("13 + 17i")
-t3 = Complex.arccos(t1)
+t3 = Complex.gamma(t1)      # i! = 0.498015668 - 0.154949828i
 print(t1)
 print(t2)
 print(t3)
-
-print(1/m.sqrt(2))
 
 
 #print(Complex.power(t1, t1))
