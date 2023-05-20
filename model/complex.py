@@ -308,26 +308,68 @@ class Complex (r.Real, i.Imaginary):
 
     # takes the gamma of a complex number, c
     # where c is in the form: c = a + bi
-    # utilizes the Euler reflection formula recursively to calculate a value
+    # utilizes the Euler reflection formula recursively and
+    # Lanczos numerical approximation as a base case to calculate a value
     # Euler reflection formula is as follows:
     # Γ(c) * Γ(1 - c) = π/sin(πc)
     # hence, to calculate Γ(c):
     # Γ(c) = π/(sin(πc) * Γ(1 - c))
-    # uses an accumulator to keep track of the number of iterations
-    # c cannot be an integer
+    # c cannot be an integer for the reflection formula
+    # the reflection formula is good for approximating complex numbers with
+    # a negative real part. This will be used while c.real < 0.5
+    # when c.real >= 0.5, switch to Lanczos approximation
+    # Lanczos is more efficient and works as follows:
+    # Γ(c+1) ≈ sqrt(2π) * (c + g + 0.5)^(c + 0.5) * e^(-(c + g + 0.5)) * A(c)
+    # g is Lanczos parameter which is typically 5
+    # A(c) = a0 + a1/(c + 1) + a2/(c + 2) + a3/(c + 3) + ...
+    # a0, a1, a2 are pre-calculated coefficients
     @staticmethod
     def gamma(c):
-        if c.imaginary == 0:
-            try:
-                return m.gamma(c.real)
-            except ValueError as e:
-                print(e)
-        else:
-            limit = 100
-        result = gamma_recursive(c, 1, limit)
-        return result
+        if c.real >= 0.5: # base case
+            # use Lanczos approximation
+            # Γ(c+1) ≈ sqrt(2π) * (c + g + 0.5)^(c + 0.5) * e^(-(c + g + 0.5)) * A(c)
+
+            # approximation term (A(c)). a.k.a, a0, a1, a2...
+            coefficients = [676.5203681218851, -1259.1392167224028, 771.3234287776531,
+                            -176.6150291621406, 12.507343278686905, -0.13857109526572012,
+                            9.984369578019571e-6, 1.5056327351493116e-7]
+
+            # result = A(c) = a0 + a1/(c + 1) + a2/(c + 2) + a3/(c + 3) + ...
+            term = Complex(1.000000000190015, 0.999999998819215)
+            result = Complex("0.9999999999998099")
+            for index, coefficient in enumerate(coefficients):
+                # term = term /= (c + i + 1)
+                term = Complex.div(term, Complex.add(c, Complex(str(index + 1))))
+                # result += coefficient * term
+                result = Complex.add(result, Complex.mult( Complex(str(coefficient)) , term))
+
+            # p = c + (g+1) - 0.5 = c + g + 0.5
+            p = Complex.add(c, Complex(str(len(coefficients) - 0.5)))
+
+            # q = c + 0.5
+            q = Complex(c.real + 0.5, c.imaginary)
+
+            # r = e^(-p) = e^(-(c + g + 0.5))
 
 
+            # sqrt(2pi)
+            sqrt_two_pi = Complex.root(Complex(2*m.pi, 0))
+            pass
+
+        else: # c.real < 0.5
+            # use Euler's reflection
+            # Γ(c) = π/(sin(πc) * Γ(1 - c))
+            pic = Complex.mult(pi, c)  # πc
+            sin_pic = Complex.sin(pic)  # sin(πc)
+            new_arg = Complex.sub(one, c)  # 1 - c
+            gamma_new_arg = Complex.gamma(new_arg)  # Γ(1 - c), recursive step
+            denominator = Complex.mult(gamma_new_arg, sin_pic)  # sin(πc) * Γ(1 - c)
+            result = Complex.div(pi, denominator)
+            return result
+
+# constant for gamma_recursive function
+pi = Complex(m.pi, 0)  # pi
+one = Complex(1, 0)  # 1
 
 
 
@@ -531,26 +573,21 @@ def cis_correction(n_mod: Complex, n_arg: float):
         n_cis = Complex(cos_n_arg, sin_n_arg)
     return Complex.mult(n_mod, n_cis)
 
-
-# constant for gamma_recursive function
-pi = Complex(str(m.pi)) # pi
-one = Complex("1") # 1
-
-# recursive helper for the gamma function
-def gamma_recursive(c: Complex, accumulator: int, limit: int):
-    # !!! bug in this function
-    if accumulator == limit:
-        return one
-    else:
-        accumulator += 1
-        # Γ(c) = π/(sin(πc) * Γ(1 - c))
-        pic = Complex.mult(pi, c)                                     # πc
-        sin_pic = Complex.sin(pic)                                    # sin(πc)
-        new_arg = Complex.sub(one, c)                                 # 1 - c
-        gamma_new_arg = gamma_recursive(new_arg, accumulator, limit)  # Γ(1 - c), recursive step
-        denominator = Complex.mult(gamma_new_arg, sin_pic)            # sin(πc) * Γ(1 - c)
-        result = Complex.div(pi, denominator)
-        return result
+# # recursive helper for the gamma function
+# def gamma_recursive(c: Complex, accumulator: int, limit: int):
+#     # !!! bug in this function
+#     if accumulator == limit:
+#         return one
+#     else:
+#         accumulator += 1
+#         # Γ(c) = π/(sin(πc) * Γ(1 - c))
+#         pic = Complex.mult(pi, c)                                     # πc
+#         sin_pic = Complex.sin(pic)                                    # sin(πc)
+#         new_arg = Complex.sub(one, c)                                 # 1 - c
+#         gamma_new_arg = gamma_recursive(new_arg, accumulator, limit)  # Γ(1 - c), recursive step
+#         denominator = Complex.mult(gamma_new_arg, sin_pic)            # sin(πc) * Γ(1 - c)
+#         result = Complex.div(pi, denominator)
+#         return result
 
 
 # testing
