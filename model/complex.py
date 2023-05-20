@@ -349,6 +349,23 @@ class Complex (r.Real, i.Imaginary):
         # taylor polynomial approximation provides a better approximation
         return erf_taylor_approx(c)
 
+    # takes the erfi() {imaginary error function} of a complex number, c
+    # where c is in the form: c = a + bi
+    # erfi(c) = -i * erf(i*c)
+    @staticmethod
+    def erf_i(c):
+        # iota = Complex(0, 1) # i
+        # new_c = Complex.mult(c, iota) # new_c = i * c
+        # result = Complex.mult(Complex.erf(new_c), iota) # i*erf(ic)
+        # return Complex(-result.real, -result.imaginary) # -i*erf(ic)
+
+        # or
+        result = Complex.erf(c)
+        return Complex(result.imaginary, result.real)
+
+
+
+
 
 
 # constant for gamma_recursive function
@@ -656,7 +673,7 @@ def erf_taylor_approx(c: Complex):
 t1 = Complex("1 + i")
 t2 = Complex("3 + 4i")
 # t3 = Complex.gamma(Complex("1 + i"))      # i! = 0.498015668 - 0.154949828i
-t4 = Complex.erf(t1)
+t4 = Complex.erf_i(t1)
 print(t1)
 # print(t2)
 print(t4)
