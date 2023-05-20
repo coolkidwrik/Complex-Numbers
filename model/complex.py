@@ -326,36 +326,7 @@ class Complex (r.Real, i.Imaginary):
     @staticmethod
     def gamma(c):
         if c.real >= 0.5: # base case
-            # use Lanczos approximation
-            # Γ(c+1) ≈ sqrt(2π) * (c + g + 0.5)^(c + 0.5) * e^(-(c + g + 0.5)) * A(c)
-
-            # approximation term (A(c)). a.k.a, a0, a1, a2...
-            coefficients = [676.5203681218851, -1259.1392167224028, 771.3234287776531,
-                            -176.6150291621406, 12.507343278686905, -0.13857109526572012,
-                            9.984369578019571e-6, 1.5056327351493116e-7]
-
-            # result = A(c) = a0 + a1/(c + 1) + a2/(c + 2) + a3/(c + 3) + ...
-            term = Complex(1.000000000190015, 0.999999998819215)
-            result = Complex("0.9999999999998099")
-            for index, coefficient in enumerate(coefficients):
-                # term = term /= (c + i + 1)
-                term = Complex.div(term, Complex.add(c, Complex(str(index + 1))))
-                # result += coefficient * term
-                result = Complex.add(result, Complex.mult( Complex(str(coefficient)) , term))
-
-            # p = c + (g+1) - 0.5 = c + g + 0.5
-            p = Complex.add(c, Complex(str(len(coefficients) - 0.5)))
-
-            # q = c + 0.5
-            q = Complex(c.real + 0.5, c.imaginary)
-
-            # r = e^(-p) = e^(-(c + g + 0.5))
-
-
-            # sqrt(2pi)
-            sqrt_two_pi = Complex.root(Complex(2*m.pi, 0))
-            pass
-
+            return lanczos_approx(c)
         else: # c.real < 0.5
             # use Euler's reflection
             # Γ(c) = π/(sin(πc) * Γ(1 - c))
@@ -572,6 +543,51 @@ def cis_correction(n_mod: Complex, n_arg: float):
     else:
         n_cis = Complex(cos_n_arg, sin_n_arg)
     return Complex.mult(n_mod, n_cis)
+
+# Lanczos approximation helper function for the gamma function
+def lanczos_approx(c):
+    # use Lanczos approximation
+    # Γ(c+1) ≈ sqrt(2π) * (c + g + 0.5)^(c + 0.5) * e^(-(c + g + 0.5)) * A(c)
+
+    # approximation term (A(c)). a.k.a, a0, a1, a2...
+    coefficients = [676.5203681218851, -1259.1392167224028, 771.3234287776531,
+                    -176.6150291621406, 12.507343278686905, -0.13857109526572012,
+                    9.984369578019571e-6, 1.5056327351493116e-7]
+
+    # result = A(c) = a0 + a1/(c + 1) + a2/(c + 2) + a3/(c + 3) + ...
+    term = Complex(1.000000000190015, 0.999999998819215)
+    result = Complex("0.9999999999998099")
+    for index, coefficient in enumerate(coefficients):
+        # term = term /= (c + i + 1)
+        term = Complex.div(term, Complex.add(c, Complex(str(index + 1))))
+        # result += coefficient * term
+        result = Complex.add(result, Complex.mult(Complex(str(coefficient)), term))
+
+    # p = c + (g+1) - 0.5 = c + g + 0.5
+    p = Complex.add(c, Complex(str(len(coefficients) - 0.5)))
+
+    # q = c + 0.5
+    q = Complex(c.real + 0.5, c.imaginary)
+
+    # exp_p_nep = e^(-p) = e^(-(c + g + 0.5))
+    p_neg = Complex(-1 * p.real, -1 * p.imaginary)
+    exp_p_nep = Complex.exp(p_neg)
+
+    # p_to_q = p^q = (c + g + 0.5)^(c + 0.5)
+    p_to_q = Complex.power(p, q)
+
+    # sqrt(2pi)
+    sqrt_two_pi = Complex.root(Complex(2 * m.pi, 0), Complex("2"))
+
+    # result = sqrt(2π) * (c + g + 0.5)^(c + 0.5) * e^(-(c + g + 0.5)) * A(c)
+    result = Complex.mult(result, exp_p_nep)
+    result = Complex.mult(result, p_to_q)
+    result = Complex.mult(result, sqrt_two_pi)
+
+    return result
+
+
+
 
 # # recursive helper for the gamma function
 # def gamma_recursive(c: Complex, accumulator: int, limit: int):
