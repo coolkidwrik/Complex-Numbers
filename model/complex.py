@@ -345,7 +345,8 @@ class Complex (r.Real, i.Imaginary):
     # where c is in the form: c = a + bi
     @staticmethod
     def erf(c):
-        return erf_continued_fraction_approx(c)
+        # return erf_continued_fraction_approx(c)
+        return erf_taylor_approx(c)
 
 
 
@@ -614,8 +615,8 @@ def erf_continued_fraction_approx(complex_number: Complex):
         error = 1e-15  # Tolerance for convergence
 
         for i in range(n):
-            an = Complex.mult(a, Complex(1, 2))  # an = (2 * i + 1) * a
-            bn = Complex.mult(d, Complex(1, 2))  # bn = (2 * i + 1) * d
+            an = Complex.mult(a, Complex(1 + 2*i, 0))  # an = (2 * i + 1) * a
+            bn = Complex.mult(d, Complex(1 + 2*i, 0))  # bn = (2 * i + 1) * d
             c, d = d, Complex.sub(Complex.mult(bn, d), Complex.mult(an, c))  # c, d = d, bn * d - an * c
             c = Complex.div(c, d)  # c = c/d
             a = an
@@ -633,8 +634,21 @@ def erf_continued_fraction_approx(complex_number: Complex):
         return result
 
 # helper function for the complex error function that uses the taylor series approximation
-def erf_taylor_approx(complex_number: Complex):
-    pass
+def erf_taylor_approx(c: Complex):
+    result = c
+    term = c
+
+    for i in range(1, 50):
+        num1 = Complex.mult(c, c)                                 # c^2
+        num1 = Complex.exp(Complex(-num1.real, -num1.imaginary))  # e^(-c^2)
+        num2 = Complex(1 + 2*i, 0)                                # 1+2*(iteration no.)
+        term = Complex.mult(term, num1)
+        term = Complex.div(term, num2)
+        result = Complex.add(result, term)
+
+    sqrt_pi = Complex(m.pi ** 0.5, 0)
+    result = Complex.div(result, sqrt_pi)
+    return Complex(result.real*2, result.imaginary*2)
 
 
 # testing
