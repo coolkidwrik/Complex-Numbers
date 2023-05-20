@@ -344,23 +344,9 @@ class Complex (r.Real, i.Imaginary):
     # takes the erf() of a complex number, c
     # where c is in the form: c = a + bi
     @staticmethod
-    def erf(complex_number):
-        if complex_number.imaginary == 0:
-            return m.erf(complex_number.real)  # Use math.erf for real numbers
-        else:
-            a = Complex.mult(Complex(1, 0), complex_number)          # (1 + 0i) * c
-            b = Complex(m.sqrt(m.pi), 0)                             # ((0 + 0i) * c) + sqrt(π)
-            c = Complex.mult(Complex(1, 0), complex_number)          # (1 + 0i) * c
-            d = Complex.add(Complex.mult(complex_number, complex_number), Complex(0.5, 0))  # (0.5 + 0i) + c^2
+    def erf(c):
+        return erf_continued_fraction_approx(c)
 
-            n = 100  # Number of iterations
-            error = 1e-15  # Tolerance for convergence
-
-            for i in range(n):
-                an = Complex.mult(a, Complex(1, 2))  # an = (2 * i + 1) * a
-                bn = Complex.mult(d, Complex(1, 2))  # bn = (2 * i + 1) * d
-                # c, d = d, bn * d - an * c
-                pass
 
 
 # constant for gamma_recursive function
@@ -570,7 +556,7 @@ def cis_correction(n_mod: Complex, n_arg: float):
     return Complex.mult(n_mod, n_cis)
 
 # Lanczos approximation helper function for the gamma function
-def lanczos_approx(c):
+def lanczos_approx(c: Complex):
     # use Lanczos approximation
     # Γ(c+1) ≈ sqrt(2π) * (c + g + 0.5)^(c + 0.5) * e^(-(c + g + 0.5)) * A(c)
 
@@ -614,14 +600,51 @@ def lanczos_approx(c):
 
     return result
 
+# helper function for the complex error function that uses the continued fraction approximation
+def erf_continued_fraction_approx(complex_number: Complex):
+    if complex_number.imaginary == 0:
+        return m.erf(complex_number.real)  # Use math.erf for real numbers
+    else:
+        a = Complex.mult(Complex(1, 0), complex_number)  # (1 + 0i) * c
+        b = Complex(m.sqrt(m.pi), 0)  # ((0 + 0i) * c) + sqrt(π)
+        c = Complex.mult(Complex(1, 0), complex_number)  # (1 + 0i) * c
+        d = Complex.add(Complex.mult(complex_number, complex_number), Complex(0.5, 0))  # (0.5 + 0i) + c^2
+
+        n = 100  # Number of iterations
+        error = 1e-15  # Tolerance for convergence
+
+        for i in range(n):
+            an = Complex.mult(a, Complex(1, 2))  # an = (2 * i + 1) * a
+            bn = Complex.mult(d, Complex(1, 2))  # bn = (2 * i + 1) * d
+            c, d = d, Complex.sub(Complex.mult(bn, d), Complex.mult(an, c))  # c, d = d, bn * d - an * c
+            c = Complex.div(c, d)  # c = c/d
+            a = an
+            b = Complex.add(b, c)
+            if c.mod().real < error:
+                break
+
+        # (0.5 - 0.5j) * e^(-z ^ 2) / z * b
+        num = Complex(0.5, 0.5)
+        result = Complex.mult(complex_number, complex_number)
+        result = Complex.exp(Complex(-result.real, -result.imaginary))
+        result = Complex.div(result, complex_number)
+        result = Complex.mult(result, b)
+        result = Complex.mult(num, result)
+        return result
+
+# helper function for the complex error function that uses the taylor series approximation
+def erf_taylor_approx(complex_number: Complex):
+    pass
+
 
 # testing
 t1 = Complex("1 + i")
 t2 = Complex("3 + 4i")
-t3 = Complex.gamma(t1)      # i! = 0.498015668 - 0.154949828i
-# print(t1)
+# t3 = Complex.gamma(Complex("1 + i"))      # i! = 0.498015668 - 0.154949828i
+t4 = Complex.erf(t1)
+print(t1)
 # print(t2)
-print(t3)
+print(t4)
 
 # t4 = Complex("0")
 # t5 = Complex(str(m.pi/2))
