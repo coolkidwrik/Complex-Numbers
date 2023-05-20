@@ -346,6 +346,7 @@ class Complex (r.Real, i.Imaginary):
     @staticmethod
     def erf(c):
         # return erf_continued_fraction_approx(c)
+        # taylor polynomial approximation provides a better approximation
         return erf_taylor_approx(c)
 
 
