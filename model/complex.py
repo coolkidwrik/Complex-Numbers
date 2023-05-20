@@ -550,13 +550,16 @@ def lanczos_approx(c):
     # Γ(c+1) ≈ sqrt(2π) * (c + g + 0.5)^(c + 0.5) * e^(-(c + g + 0.5)) * A(c)
 
     # approximation term (A(c)). a.k.a, a0, a1, a2...
+    # the following list consists of coefficients staring from a1
     coefficients = [676.5203681218851, -1259.1392167224028, 771.3234287776531,
                     -176.6150291621406, 12.507343278686905, -0.13857109526572012,
-                    9.984369578019571e-6, 1.5056327351493116e-7]
+                    9.984369578019571e-6, 1.5056327351493116e-7, -1.2109640976628544e-9,
+                    -5.363819747944671e-11, 4.5052547179567e-13, -7.08150596454932e-15,
+                    1.19506271168695e-16, 2.315818733241201e-18, -5.027761020408414e-20]
 
     # result = A(c) = a0 + a1/(c + 1) + a2/(c + 2) + a3/(c + 3) + ...
     term = Complex(1.000000000190015, 0.999999998819215)
-    result = Complex("0.9999999999998099")
+    result = Complex(0.9999999999998099, 0)               # a0 = 0.9999999999998099
     for index, coefficient in enumerate(coefficients):
         # term = term /= (c + i + 1)
         term = Complex.div(term, Complex.add(c, Complex(str(index + 1))))
@@ -585,25 +588,6 @@ def lanczos_approx(c):
     result = Complex.mult(result, sqrt_two_pi)
 
     return result
-
-
-
-
-# # recursive helper for the gamma function
-# def gamma_recursive(c: Complex, accumulator: int, limit: int):
-#     # !!! bug in this function
-#     if accumulator == limit:
-#         return one
-#     else:
-#         accumulator += 1
-#         # Γ(c) = π/(sin(πc) * Γ(1 - c))
-#         pic = Complex.mult(pi, c)                                     # πc
-#         sin_pic = Complex.sin(pic)                                    # sin(πc)
-#         new_arg = Complex.sub(one, c)                                 # 1 - c
-#         gamma_new_arg = gamma_recursive(new_arg, accumulator, limit)  # Γ(1 - c), recursive step
-#         denominator = Complex.mult(gamma_new_arg, sin_pic)            # sin(πc) * Γ(1 - c)
-#         result = Complex.div(pi, denominator)
-#         return result
 
 
 # testing
