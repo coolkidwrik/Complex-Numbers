@@ -323,9 +323,12 @@ class Complex (r.Real, i.Imaginary):
     # g is Lanczos parameter which is typically 5
     # A(c) = a0 + a1/(c + 1) + a2/(c + 2) + a3/(c + 3) + ...
     # a0, a1, a2 are pre-calculated coefficients
+    # only provides a very rough approximation
     @staticmethod
     def gamma(c):
-        if c.real >= 0.5: # base case
+        if c.imaginary == 0:
+            return Complex(m.gamma(c.real), 0)
+        elif c.real >= 0.5: # base case
             return lanczos_approx(c)
         else: # c.real < 0.5
             # use Euler's reflection
@@ -337,6 +340,28 @@ class Complex (r.Real, i.Imaginary):
             denominator = Complex.mult(gamma_new_arg, sin_pic)  # sin(πc) * Γ(1 - c)
             result = Complex.div(pi, denominator)
             return result
+
+    # takes the erf() of a complex number, c
+    # where c is in the form: c = a + bi
+    @staticmethod
+    def erf(complex_number):
+        if complex_number.imaginary == 0:
+            return m.erf(complex_number.real)  # Use math.erf for real numbers
+        else:
+            a = Complex.mult(Complex(1, 0), complex_number)          # (1 + 0i) * c
+            b = Complex(m.sqrt(m.pi), 0)                             # ((0 + 0i) * c) + sqrt(π)
+            c = Complex.mult(Complex(1, 0), complex_number)          # (1 + 0i) * c
+            d = Complex.add(Complex.mult(complex_number, complex_number), Complex(0.5, 0))  # (0.5 + 0i) + c^2
+
+            n = 100  # Number of iterations
+            error = 1e-15  # Tolerance for convergence
+
+            for i in range(n):
+                an = Complex.mult(a, Complex(1, 2))  # an = (2 * i + 1) * a
+                bn = Complex.mult(d, Complex(1, 2))  # bn = (2 * i + 1) * d
+                # c, d = d, bn * d - an * c
+                pass
+
 
 # constant for gamma_recursive function
 pi = Complex(m.pi, 0)  # pi
@@ -553,9 +578,9 @@ def lanczos_approx(c):
     # the following list consists of coefficients staring from a1
     coefficients = [676.5203681218851, -1259.1392167224028, 771.3234287776531,
                     -176.6150291621406, 12.507343278686905, -0.13857109526572012,
-                    9.984369578019571e-6, 1.5056327351493116e-7, -1.2109640976628544e-9,
-                    -5.363819747944671e-11, 4.5052547179567e-13, -7.08150596454932e-15,
-                    1.19506271168695e-16, 2.315818733241201e-18, -5.027761020408414e-20]
+                    9.984369578019571e-6, 1.5056327351493116e-7, -1.2109640976628544e-9]
+                    # -5.363819747944671e-11, 4.5052547179567e-13, -7.08150596454932e-15,
+                    # 1.19506271168695e-16, 2.315818733241201e-18, -5.027761020408414e-20]
 
     # result = A(c) = a0 + a1/(c + 1) + a2/(c + 2) + a3/(c + 3) + ...
     term = Complex(1.000000000190015, 0.999999998819215)
