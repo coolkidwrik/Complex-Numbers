@@ -276,9 +276,17 @@ class Complex (r.Real, i.Imaginary):
 
     # takes the arctan of a complex number, c
     # where c is in the form: c = a + bi
+    # use complex definition of arctan(c)
+    # arctan(c) = ln((1 + ic)/(1 - ic)) / (2i)
     @staticmethod
     def arctan(c):
-        pass
+        two_iota = Complex("2i") # 2i
+        ic = Complex.mult(c, iota) # ic
+        numerator_arg = Complex.add(one, ic) # 1 + ic
+        denominator_arg = Complex.sub(one, ic) # 1 - ic
+        arg = Complex.div(numerator_arg, denominator_arg) # (1 + ic)/(1 - ic)
+        ln_arg = Complex.natural_log(arg)
+        return Complex.div(ln_arg, two_iota)
 
     # takes the gamma of a complex number, c
     # where c is in the form: c = a + bi
@@ -668,7 +676,7 @@ def erf_taylor_approx(c: Complex):
 t1 = Complex("1 + i")
 t2 = Complex("3 + 4i")
 t3 = Complex.gamma(Complex("1 + i"))      # i! = 0.498015668 - 0.154949828i
-t4 = Complex.arccos(t1)
+t4 = Complex.arctan(t1)
 # print(t1)
 # # print(t2)
 print(t4)
