@@ -137,7 +137,6 @@ class Complex (r.Real, i.Imaginary):
     # input expression looks like (a + bi)^(1/(c + di))
     @staticmethod
     def root(c1, c2):
-        one = Complex("1")
         exp = Complex.div(one, c2)
         return Complex.power(c1, exp)
 
@@ -265,20 +264,7 @@ class Complex (r.Real, i.Imaginary):
     # arcsin(c) = ln(ic + sqrt(1-c^2) )/i
     @staticmethod
     def arcsin(c):
-        iota = Complex("i")  # i  # denominator
-        one = Complex("1")  # 1
-        two = Complex("2")  # 2
-
-        # numerator
-        ic = Complex.mult(c, iota)  # ic
-        c_squared = Complex.power(c, two)  # c^2
-        diff = Complex.sub(one, c_squared)  # 1 - c^2
-        sqrt = Complex.root(diff, two)  # sqrt(1 - c^2)
-        summ = Complex.add(ic, sqrt)  # ic + sqrt(1 - c^2)
-        numerator = Complex.natural_log(summ)  # ln(ic + sqrt(1 - c^2))
-
-        result = Complex.div(numerator, iota)
-        return result
+        return inverse_trig(Complex.mult, return_first, c)
 
     # takes the arccos of a complex number, c
     # where c is in the form: c = a + bi
@@ -286,19 +272,7 @@ class Complex (r.Real, i.Imaginary):
     # arccos(c) = ln(c + sqrt(c^2 - 1) )/i
     @staticmethod
     def arccos(c):
-        iota = Complex("i")  # i  # denominator
-        one = Complex("1")  # 1
-        two = Complex("2")  # 2
-
-        # numerator
-        c_squared = Complex.power(c, two)  # c^2
-        diff = Complex.sub(c_squared, one)  # c^2 - 1
-        sqrt = Complex.root(diff, two)  # sqrt(c^2 - 1)
-        summ = Complex.add(c, sqrt)  # c + sqrt(c^2 - 1)
-        numerator = Complex.natural_log(summ)  # ln(c + sqrt(c^2 - 1))
-
-        result = Complex.div(numerator, iota)
-        return result
+        return inverse_trig(return_first, mult_minus_one, c)
 
     # takes the arctan of a complex number, c
     # where c is in the form: c = a + bi
@@ -354,23 +328,23 @@ class Complex (r.Real, i.Imaginary):
     # erfi(c) = -i * erf(i*c)
     @staticmethod
     def erf_i(c):
-        # iota = Complex(0, 1) # i
-        # new_c = Complex.mult(c, iota) # new_c = i * c
-        # result = Complex.mult(Complex.erf(new_c), iota) # i*erf(ic)
-        # return Complex(-result.real, -result.imaginary) # -i*erf(ic)
-
+        # result = Complex.erf(c)
+        # return Complex(result.imaginary, result.real)
         # or
-        result = Complex.erf(c)
-        return Complex(result.imaginary, result.real)
+
+        new_c = Complex.mult(c, iota) # new_c = i * c
+        result = Complex.mult(Complex.erf(new_c), iota) # i*erf(ic)
+        return Complex(-result.real, -result.imaginary) # -i*erf(ic)
 
 
 
 
 
 
-# constant for gamma_recursive function
+# constants for functions
 pi = Complex(m.pi, 0)  # pi
 one = Complex(1, 0)  # 1
+iota = Complex(0, 1) # i
 
 
 
@@ -444,7 +418,6 @@ def complex_to_string(complex_number: Complex):
 # helper, higher-order function for sine and cosine
 # abstracts away most of the code required for sine and cosine
 def trig(func, c: Complex, denominator: str):
-    iota = Complex("i")
     neg_iota = Complex("-i")
     denominator = Complex(denominator)
     ic = Complex.mult(iota, c)
@@ -461,22 +434,44 @@ def trig(func, c: Complex, denominator: str):
 # helper, higher-order function for co-secant and secant
 # abstracts away most of the code required for co-secant and secant
 def reciprocal_trig(func, c: Complex):
-    numerator = Complex("1")
+    # one = numerator
     denominator = func(c)
-    return Complex.div(numerator, denominator)
+    return Complex.div(one, denominator)
 
 # helper, higher-order function for sinh and cosh
 # abstracts away most of the code required for sinh and cosh
 def hyperbolic_trig(func1, func2, c: Complex):
-    iota = Complex("i")
     it = Complex.mult(iota, c)
     result = func1(it)
     return func2(result, iota)
 
-# helper function for hyperbolic_trig when performing cosh
-# returns first argument
-def return_first(result, arbitrary):
+# helper, higher-order function for arc-sine and arc-cosine
+# abstracts away most of the code required for arc-sine and arc-cosine
+def inverse_trig(func1, func2, c: Complex):
+    # iota = denominator
+    two = Complex("2")  # 2
+
+    # numerator
+    ic = func1(c, iota)  # ic for arc-sine and c for arc-cosine
+    c_squared = Complex.power(c, two)  # c^2
+    diff = Complex.sub(one, c_squared)  # 1 - c^2
+    diff = func2(diff)              # (1 - c^2) for arc-sine and (c^2 -1) for arc-cosine
+    sqrt = Complex.root(diff, two)  # sqrt(1 - c^2) or sqrt(c^2 - 1)
+    summ = Complex.add(ic, sqrt)  # ic + sqrt(1 - c^2) or c + sqrt(c^2 - 1)
+    numerator = Complex.natural_log(summ)  # ln(ic + sqrt(1 - c^2)) or ln(c + sqrt(c^2 - 1))
+
+    result = Complex.div(numerator, iota)
     return result
+
+# helper function for hyperbolic_trig and inverse_trig when performing cosh
+# returns first argument
+def return_first(result, arbitrary = 0):
+    return result
+
+# helper function for hyperbolic_trig and inverse_trig when performing cosh
+# returns input Complex number, times -1
+def mult_minus_one(c: Complex):
+    return Complex(-c.real, -c.imaginary)
 
 
 # returns the exponent of euler's form as a complex number
@@ -672,10 +667,10 @@ def erf_taylor_approx(c: Complex):
 # testing
 t1 = Complex("1 + i")
 t2 = Complex("3 + 4i")
-# t3 = Complex.gamma(Complex("1 + i"))      # i! = 0.498015668 - 0.154949828i
-t4 = Complex.erf_i(t1)
-print(t1)
-# print(t2)
+t3 = Complex.gamma(Complex("1 + i"))      # i! = 0.498015668 - 0.154949828i
+t4 = Complex.arccos(t1)
+# print(t1)
+# # print(t2)
 print(t4)
 
 # t4 = Complex("0")
