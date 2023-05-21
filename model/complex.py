@@ -299,6 +299,8 @@ class Complex (r.Real, imag.Imaginary):
         ln_arg = Complex.natural_log(arg)
         return Complex.div(ln_arg, two_iota)
 
+    # non-elementary functions
+
     # takes the gamma of a complex number, c
     # where c is in the form: c = a + bi
     # utilizes the Euler reflection formula recursively and
