@@ -1,10 +1,10 @@
 import real as r
-import imaginary as i
+import imaginary as imag
 import math as m
 
 
 # defines a complex number consisting of a real and imaginary part
-class Complex (r.Real, i.Imaginary):
+class Complex (r.Real, imag.Imaginary):
 
     # creates a complex number consisting of a real and imaginary part
     # if number of arguments is 1, its given a string and creates a complex number
@@ -98,20 +98,20 @@ class Complex (r.Real, i.Imaginary):
     @staticmethod
     def add(c1, c2):
         real = r.Real.add(c1.real, c2.real)
-        imaginary = i.Imaginary.add(c1.imaginary, c2.imaginary)
+        imaginary = imag.Imaginary.add(c1.imaginary, c2.imaginary)
         return Complex(real, imaginary)
 
     # subtracts two complex numbers together
     @staticmethod
     def sub(c1, c2):
         real = r.Real.sub(c1.real, c2.real)
-        imaginary = i.Imaginary.sub(c1.imaginary, c2.imaginary)
+        imaginary = imag.Imaginary.sub(c1.imaginary, c2.imaginary)
         return Complex(real, imaginary)
 
     # multiplies two complex numbers together
     @staticmethod
     def mult(c1, c2):
-        real = r.Real.mult(c1.real, c2.real) + i.Imaginary.mult(c1.imaginary, c2.imaginary)
+        real = r.Real.mult(c1.real, c2.real) + imag.Imaginary.mult(c1.imaginary, c2.imaginary)
         imaginary = c1.real * c2.imaginary + c1.imaginary * c2.real
         return Complex(real, imaginary)
 
@@ -121,7 +121,7 @@ class Complex (r.Real, i.Imaginary):
         numerator = Complex.mult(c1, c2.conjugate())
         denominator = Complex.mult(c2, c2.conjugate())
         real = r.Real.div(numerator.real, denominator.real)
-        imaginary = i.Imaginary.div(numerator.imaginary, denominator.real)
+        imaginary = imag.Imaginary.div(numerator.imaginary, denominator.real)
         return Complex(real, imaginary)
 
     # raises complex number, c1 to the power of another complex number, c2
