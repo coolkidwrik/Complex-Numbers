@@ -1,5 +1,5 @@
-import real as r
-import imaginary as imag
+import model.real as r
+import model.imaginary as imag
 import math as m
 
 
@@ -32,14 +32,25 @@ class Complex (r.Real, imag.Imaginary):
     def __repr__(self):
         return complex_to_string(self)
 
+    # overwrites the object classes equal function to compare complex numbers based on their
+    # real and imaginary components
+    def __eq__(self, other):
+        if self.real == other.real and self.imaginary == other.imaginary:
+            return True
+        return False
+
     # returns complex conjugate
     def conjugate(self):
         return Complex(self.real, -1 * self.imaginary)
 
     # gets the sign of the imaginary component
     def get_sign(self):
-        complex_number = complex_to_string(self).split()
-        return complex_number[1]
+        if self.imaginary >= 0:
+            return "+"
+        else:
+            if self.imaginary < 0:
+                return "-"
+
 
     # returns the argument of a complex number, which is itself a complex number
     def arg(self):
@@ -350,9 +361,11 @@ class Complex (r.Real, imag.Imaginary):
 
 
 # constants for functions
-pi = Complex(m.pi, 0)  # pi
-one = Complex(1, 0)  # 1
-iota = Complex(0, 1) # i
+pi = Complex(m.pi, 0)                   # pi
+pi_over_two = Complex(m.pi / 2, 0)      # pi/2
+neg_pi_over_two = Complex(-m.pi / 2, 0)  # -pi/2
+one = Complex(1, 0)                     # 1
+iota = Complex(0, 1)                    # i
 
 
 

@@ -1,8 +1,8 @@
-import number as n
+import model.number as num
 
 
 # defines all the same functions as the Number class, except multiply and power
-class Imaginary(n.Number):
+class Imaginary(num.Number):
 
     @staticmethod
     def mult(r1, r2):

@@ -1,6 +1,6 @@
-import number
+import model.number as num
 
 
 # shares all the same functions as the number parent class
-class Real(number.Number):
+class Real(num.Number):
     pass
