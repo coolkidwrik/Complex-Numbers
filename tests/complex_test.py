@@ -192,7 +192,40 @@ class TestComplex(t.TestCase):
 
     # test taking a complex power of complex numbers
     def test_power(self):
-        pass
+        # dividing real and imaginary components
+        self.assertEqual(Complex.div(self.i, self.one), self.i)
+        self.assertEqual(Complex.div(self.one, self.i), self.neg_i)
+        self.assertEqual(Complex.div(self.one, self.neg_i), self.i)
+        self.assertEqual(Complex.div(self.neg_i, self.one), self.neg_i)
+        self.assertEqual(Complex.div(self.neg_one, self.i), self.i)
+        self.assertEqual(Complex.div(self.neg_one, self.neg_i), self.neg_i)
+        # dividing only real numbers
+        two = Complex(2, 0)
+        three = Complex(3, 0)
+        six = Complex(6, 0)
+        self.assertEqual(Complex.div(self.one, self.one), self.one)
+        self.assertEqual(Complex.div(self.one, self.neg_one), self.neg_one)
+        self.assertEqual(Complex.div(self.neg_one, self.one), self.neg_one)
+        self.assertEqual(Complex.div(two, three), Complex(2 / 3, 0))
+        self.assertEqual(Complex.div(six, three), two)
+        # dividing only imaginary numbers
+        i_to_the_0 = Complex.div(self.i, self.i)
+        i_to_the_neg_one = Complex.div(i_to_the_0, self.i)
+        i_to_the_neg_two = Complex.div(i_to_the_neg_one, self.i)
+        i_to_the_neg_three = Complex.div(i_to_the_neg_two, self.i)
+
+        i3 = Complex(0, 3)
+        i4 = Complex(0, 4)
+        self.assertEqual(i_to_the_0, self.one)
+        self.assertEqual(i_to_the_neg_one, self.neg_i)
+        self.assertEqual(i_to_the_neg_two, self.neg_one)
+        self.assertEqual(i_to_the_neg_three, self.i)
+        self.assertEqual(Complex.div(i3, i4), Complex(3 / 4, 0))
+        # dividing complex numbers
+        self.assertEqual(Complex.div(self.a, self.a), self.one)
+        self.assertEqual(Complex.div(self.a, self.b), self.i)
+        self.assertEqual(Complex.div(self.a, self.c), self.neg_i)
+        self.assertEqual(Complex.div(self.d, self.e), Complex(-0.14285714285714285, 0.2857142857142857))
 
     # test taking a complex root of complex numbers
     def test_root(self):
