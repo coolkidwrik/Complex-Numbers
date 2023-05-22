@@ -3,22 +3,24 @@ import unittest as t
 import math as m
 
 class TestComplex(t.TestCase):
-    # setup : class variables
-    zero = Complex(0, 0)
-    one = Complex(1, 0)        # 1
-    neg_one = Complex(-1, 0)   # -1
-    i = Complex(0, 1)          # i
-    neg_i = Complex(0, -1)     # -i
-    pi = Complex(m.pi, 0)                   # pi
-    pi_over_two = Complex(m.pi / 2, 0)      # pi/2
-    pi_over_four = Complex(m.pi / 4, 0)     # pi/4
-    neg_pi_over_two = Complex(-m.pi / 2, 0)  # -pi/2
-    a = Complex(1, 1)          # 1 + i
-    b = Complex(1, -1)         # 1 - i
-    c = Complex(-1, 1)         # -1 + i
-    d = Complex(3, 4)          # 3 + 4i
-    e = Complex(7, -14)        # 7 - 14i
 
+    # setup
+    @classmethod
+    def setUpClass(cls):
+        cls.zero = Complex(0, 0)
+        cls.one = Complex(1, 0)        # 1
+        cls.neg_one = Complex(-1, 0)   # -1
+        cls.i = Complex(0, 1)          # i
+        cls.neg_i = Complex(0, -1)     # -i
+        cls.pi = Complex(m.pi, 0)                   # pi
+        cls.pi_over_two = Complex(m.pi / 2, 0)      # pi/2
+        cls.pi_over_four = Complex(m.pi / 4, 0)     # pi/4
+        cls.neg_pi_over_two = Complex(-m.pi / 2, 0)  # -pi/2
+        cls.a = Complex(1, 1)          # 1 + i
+        cls.b = Complex(1, -1)         # 1 - i
+        cls.c = Complex(-1, 1)         # -1 + i
+        cls.d = Complex(3, 4)          # 3 + 4i
+        cls.e = Complex(7, -14)        # 7 - 14i
 
     # testing
 
@@ -39,6 +41,7 @@ class TestComplex(t.TestCase):
 
     # test for argument of a complex number
     def test_arg(self):
+        self.assertEqual(self.zero.arg(), self.zero)
         self.assertEqual(self.one.arg(), self.zero)
         self.assertEqual(self.neg_one.arg(), self.pi)
         self.assertEqual(self.i.arg(), self.pi_over_two)
@@ -48,15 +51,30 @@ class TestComplex(t.TestCase):
 
     # test to get the modulus of a complex number
     def test_mod(self):
-        pass
+        self.assertEqual(self.one.mod(), self.one)
+        self.assertEqual(self.pi.mod(), self.pi)
+        self.assertEqual(self.i.mod(), self.one)
+        self.assertEqual(self.neg_i.mod(), self.one)
+        self.assertEqual(self.a.mod(), Complex(m.sqrt(2), 0))
+        self.assertEqual(self.d.mod(), Complex.root(Complex.mult(self.d, self.d.conjugate()), Complex(2, 0)))
 
     # test to convert rectangular form to euler form
     def test_rect_to_euler(self):
-        pass
+        self.assertEqual(self.zero.rect_to_euler(), "0")
+        self.assertEqual(self.one.rect_to_euler(), "1.0")
+        self.assertEqual(self.i.rect_to_euler(), f"e^({self.pi_over_two.real}i)")
+        self.assertEqual(self.a.rect_to_euler(), f"{m.sqrt(2)}e^({self.pi_over_four.real}i)")
+        self.assertEqual(self.d.rect_to_euler(), f"{self.d.mod()}e^({self.d.arg()}i)")
 
     # test to convert rectangular form to cis form
     def test_rect_to_cis(self):
-        pass
+        self.assertEqual(self.zero.rect_to_cis(), "0")
+        self.assertEqual(self.one.rect_to_cis(), "1.0")
+        po2 = self.pi_over_two.real
+        self.assertEqual(self.i.rect_to_cis(), f"cos({po2}) + isin({po2})")
+        po4 = self.pi_over_four.real
+        self.assertEqual(self.a.rect_to_cis(), f"{m.sqrt(2)}(cos({po4}) + isin({po4}))")
+        self.assertEqual(self.d.rect_to_cis(), f"{self.d.mod()}(cos({self.d.arg()}) + isin({self.d.arg()}))")
 
     # test static methods
 

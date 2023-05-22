@@ -56,6 +56,8 @@ class Complex (r.Real, imag.Imaginary):
     def arg(self):
         real = self.real
         imaginary = self.imaginary
+        if abs(imaginary) < 1e-7 and abs(real) < 1e-7:
+            return Complex (0,0)
         if abs(real) < 1e-7:
             if imaginary < 0:
                 result = m.pi*(-1/2)
@@ -93,7 +95,16 @@ class Complex (r.Real, imag.Imaginary):
         if abs(m.sin(float(argument))) < 1e-7:
             return modulo
         else:
-            return f"{modulo}e^{argument}i"
+            if argument == "1.0":
+                if modulo == "1.0":
+                    return f"e^i"
+                else:
+                    return f"{modulo}e^i"
+            else:
+                if modulo == "1.0":
+                    return f"e^({argument}i)"
+                else:
+                    return f"{modulo}e^({argument}i)"
 
     # returns a string representation of cis form of the complex number
     # in rectangular form
@@ -103,7 +114,12 @@ class Complex (r.Real, imag.Imaginary):
         if abs(m.sin(float(argument))) < 1e-7:
             return modulo
         else:
-            return f"{modulo}(cos({argument}) + isin({argument}))"
+            if float(modulo) < 1e-7:
+                return "0"
+            elif modulo == "1.0":
+                return f"cos({argument}) + isin({argument})"
+            else:
+                return f"{modulo}(cos({argument}) + isin({argument}))"
 
     # adds two complex numbers together
     @staticmethod
@@ -340,9 +356,12 @@ class Complex (r.Real, imag.Imaginary):
     # where c is in the form: c = a + bi
     @staticmethod
     def erf(c):
-        # return erf_continued_fraction_approx(c)
-        # taylor polynomial approximation provides a better approximation
-        return erf_taylor_approx(c)
+        if c.imaginary == 0:
+            return Complex(m.erf(c.real), 0)
+        else:
+            # return erf_continued_fraction_approx(c)
+            # taylor polynomial approximation provides a better approximation
+            return erf_taylor_approx(c)
 
     # takes the erfi() {imaginary error function} of a complex number, c
     # where c is in the form: c = a + bi
