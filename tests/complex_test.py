@@ -171,6 +171,10 @@ class TestComplex(t.TestCase):
 
     # test dividing two complex numbers
     def test_div(self):
+        # divide by 0 = undefined
+        self.assertRaises(AssertionError, Complex.div, self.a, self.zero)
+        self.assertRaises(AssertionError, Complex.div, self.b, self.zero)
+        self.assertRaises(AssertionError, Complex.div, self.d, self.zero)
         # dividing real and imaginary components
         self.assertEqual(Complex.div(self.i, self.one), self.i)
         self.assertEqual(Complex.div(self.one, self.i), self.neg_i)
@@ -310,18 +314,51 @@ class TestComplex(t.TestCase):
 
         # i√i = 4.810477380965351
         self.assertEqual(Complex.root(self.i, self.i), Complex(4.810477380965351, 0))
-        pass
 
 
     # test taking e to the power of a complex number
     def test_exp(self):
-        # identities
+        self.assertEqual(Complex.exp(self.i), Complex(0.5403023058681398, 0.8414709848078965))
+        self.assertEqual(Complex.exp(self.a), Complex(1.4686939399158851, 2.2873552871788423))
+        self.assertEqual(Complex.exp(self.b), Complex(1.4686939399158851, -2.2873552871788423))
 
-        pass
+        # identities
+            # e^1 = e
+        self.assertEqual(Complex.exp(self.one), self.E)
+            # e^0 = 1
+        self.assertEqual(Complex.exp(self.zero), self.one)
+            # e^(ipi/2) = i
+        ipi_over_2 = Complex.mult(self.pi_over_two, self.i)
+        self.assertEqual(Complex.exp(ipi_over_2), self.i)
+            # e^(-ipi/2) = -i
+        neg_ipi_over_2 = Complex.mult(self.neg_pi_over_two, self.i)
+        self.assertEqual(Complex.exp(neg_ipi_over_2), self.neg_i)
+            # e^(ipi) = -1
+        ipi = Complex.mult(self.pi, self.i)
+        neg_ipi = Complex.mult(self.pi, self.neg_i)
+        self.assertEqual(Complex.exp(ipi), self.neg_one)
+        self.assertEqual(Complex.exp(neg_ipi), self.neg_one)
 
     # test taking natural log of a complex number
     def test_natural_log(self):
-        pass
+        ipi_over_2 = Complex.mult(self.pi_over_two, self.i)
+        neg_ipi_over_2 = Complex.mult(self.neg_pi_over_two, self.i)
+        ipi = Complex.mult(self.pi, self.i)
+
+        # identities
+            # ln(0) = undefined
+        self.assertRaises(AssertionError, Complex.natural_log, self.zero)
+
+            # ln(-1) = 3.141592653589793i
+        self.assertEqual(Complex.natural_log(self.neg_one), ipi)
+            # ln(1) = 0
+
+            # ln(i) = ipi/2
+
+            # ln(-i) = -ipi/2
+
+            # ln(-1) = ipi
+
 
     # test taking log of a complex number with a complex base
     def test_log(self):
