@@ -80,19 +80,115 @@ class TestComplex(t.TestCase):
 
     # test adding two complex numbers
     def test_add(self):
-        pass
+        # combining real and imaginary components
+        self.assertEqual(Complex.add(self.i, self.one), self.a)
+        self.assertEqual(Complex.add(self.one, self.i), self.a)
+        self.assertEqual(Complex.add(self.one, self.neg_i), self.b)
+        self.assertEqual(Complex.add(self.neg_i, self.one), self.b)
+        self.assertEqual(Complex.add(self.neg_one, self.i), self.c)
+        # adding only real numbers
+        self.assertEqual(Complex.add(self.one, self.one), Complex(2, 0))
+        self.assertEqual(Complex.add(self.one, self.neg_one), self.zero)
+        # adding only imaginary numbers
+        self.assertEqual(Complex.add(self.i, self.i), Complex(0, 2))
+        self.assertEqual(Complex.add(self.i, self.neg_i), self.zero)
+        # adding complex numbers
+        self.assertEqual(Complex.add(self.a, self.a), Complex(2, 2))
+        self.assertEqual(Complex.add(self.a, self.b), Complex(2, 0))
+        self.assertEqual(Complex.add(self.a, self.c), Complex(0, 2))
+        self.assertEqual(Complex.add(self.d, self.e), Complex(10, -10))
+
 
     # test subtracting two complex numbers
     def test_sub(self):
-        pass
+        # combining real and imaginary components
+        self.assertEqual(Complex.sub(self.i, self.one), self.c)
+        self.assertEqual(Complex.sub(self.one, self.i), self.b)
+        self.assertEqual(Complex.sub(self.one, self.neg_i), self.a)
+        self.assertEqual(Complex.sub(self.neg_i, self.one), Complex(-1, -1))
+        self.assertEqual(Complex.sub(self.neg_one, self.i), Complex(-1, -1))
+        # subtracting only real numbers
+        self.assertEqual(Complex.sub(self.one, self.one), self.zero)
+        self.assertEqual(Complex.sub(self.one, self.neg_one), Complex(2, 0))
+        # subtracting only imaginary numbers
+        self.assertEqual(Complex.sub(self.i, self.i), self.zero)
+        self.assertEqual(Complex.sub(self.i, self.neg_i), Complex(0, 2))
+        # subtracting complex numbers
+        self.assertEqual(Complex.sub(self.a, self.a), self.zero)
+        self.assertEqual(Complex.sub(self.a, self.b), Complex(0, 2))
+        self.assertEqual(Complex.sub(self.a, self.c), Complex(2, 0))
+        self.assertEqual(Complex.sub(self.d, self.e), Complex(-4, 18))
 
     # test multiplying two complex numbers
     def test_mult(self):
-        pass
+        # multiplying real and imaginary components
+        self.assertEqual(Complex.mult(self.i, self.one), self.i)
+        self.assertEqual(Complex.mult(self.one, self.i), self.i)
+        self.assertEqual(Complex.mult(self.one, self.neg_i), self.neg_i)
+        self.assertEqual(Complex.mult(self.neg_i, self.one), self.neg_i)
+        self.assertEqual(Complex.mult(self.neg_one, self.i), self.neg_i)
+        self.assertEqual(Complex.mult(self.neg_one, self.neg_i), self.i)
+        # multiplying only real numbers
+        two = Complex(2, 0)
+        three = Complex(3, 0)
+        self.assertEqual(Complex.mult(self.one, self.one), self.one)
+        self.assertEqual(Complex.mult(self.one, self.neg_one), self.neg_one)
+        self.assertEqual(Complex.mult(self.neg_one, self.one), self.neg_one)
+        self.assertEqual(Complex.mult(two, three), Complex(6, 0))
+        # multiplying only imaginary numbers
+        i_squared = Complex.mult(self.i, self.i)
+        i_cubed = Complex.mult(self.i, i_squared)
+        i_to_the_fourth = Complex.mult(self.i, i_cubed)
+        i_to_the_fifth = Complex.mult(self.i, i_to_the_fourth)
+        i3 = Complex(0, 3)
+        i4 = Complex(0, 4)
+        self.assertEqual(i_squared, self.neg_one)
+        self.assertEqual(i_cubed, self.neg_i)
+        self.assertEqual(i_to_the_fourth, self.one)
+        self.assertEqual(i_to_the_fifth, self.i)
+        self.assertEqual(Complex.mult(i3, i4), Complex(-12, 0))
+        # multiplying complex numbers
+        self.assertEqual(Complex.mult(self.a, self.a), Complex(0, 2))
+        self.assertEqual(Complex.mult(self.a, self.b), Complex(2, 0))
+        self.assertEqual(Complex.mult(self.a, self.c), Complex(-2, 0))
+        self.assertEqual(Complex.mult(self.d, self.e), Complex(77, -14))
 
     # test dividing two complex numbers
     def test_div(self):
-        pass
+        # dividing real and imaginary components
+        self.assertEqual(Complex.div(self.i, self.one), self.i)
+        self.assertEqual(Complex.div(self.one, self.i), self.neg_i)
+        self.assertEqual(Complex.div(self.one, self.neg_i), self.i)
+        self.assertEqual(Complex.div(self.neg_i, self.one), self.neg_i)
+        self.assertEqual(Complex.div(self.neg_one, self.i), self.i)
+        self.assertEqual(Complex.div(self.neg_one, self.neg_i), self.neg_i)
+        # dividing only real numbers
+        two = Complex(2, 0)
+        three = Complex(3, 0)
+        six = Complex(6, 0)
+        self.assertEqual(Complex.div(self.one, self.one), self.one)
+        self.assertEqual(Complex.div(self.one, self.neg_one), self.neg_one)
+        self.assertEqual(Complex.div(self.neg_one, self.one), self.neg_one)
+        self.assertEqual(Complex.div(two, three), Complex(2/3, 0))
+        self.assertEqual(Complex.div(six, three), two)
+        # dividing only imaginary numbers
+        i_to_the_0 = Complex.div(self.i, self.i)
+        i_to_the_neg_one = Complex.div(i_to_the_0, self.i)
+        i_to_the_neg_two = Complex.div(i_to_the_neg_one, self.i)
+        i_to_the_neg_three = Complex.div(i_to_the_neg_two, self.i)
+
+        i3 = Complex(0, 3)
+        i4 = Complex(0, 4)
+        self.assertEqual(i_to_the_0, self.one)
+        self.assertEqual(i_to_the_neg_one, self.neg_i)
+        self.assertEqual(i_to_the_neg_two, self.neg_one)
+        self.assertEqual(i_to_the_neg_three, self.i)
+        self.assertEqual(Complex.div(i3, i4), Complex(3/4, 0))
+        # dividing complex numbers
+        self.assertEqual(Complex.div(self.a, self.a), self.one)
+        self.assertEqual(Complex.div(self.a, self.b), self.i)
+        self.assertEqual(Complex.div(self.a, self.c), self.neg_i)
+        self.assertEqual(Complex.div(self.d, self.e), Complex(-0.14285714285714285, 0.2857142857142857))
 
     # test taking a complex power of complex numbers
     def test_power(self):
