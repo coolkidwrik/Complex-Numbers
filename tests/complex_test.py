@@ -291,10 +291,32 @@ class TestComplex(t.TestCase):
 
     # test taking a complex root of complex numbers
     def test_root(self):
+        # derivative of the power function
+        # use the power function for testing
+        two = Complex(2, 0)
+        three = Complex(3, 0)
+        four = Complex(4, 0)
+        twenty7 = Complex(27, 0)
+
+        self.assertEqual(Complex.root(self.one, two), self.one)
+        self.assertEqual(Complex.root(self.one, twenty7), self.one)
+        self.assertEqual(Complex.root(two, two), Complex(1.4142135623730951, 0))
+        self.assertEqual(Complex.root(two, three), Complex(1.2599210498948732, 0))
+        self.assertEqual(Complex.root(four, two), two)
+        self.assertEqual(Complex.root(twenty7, three), three)
+        self.assertEqual(Complex.root(self.a, self.i), Complex.power(self.a, self.neg_i))
+        self.assertEqual(Complex.root(self.a, self.b), Complex.power(self.a, Complex.power(self.b,self.neg_one)))
+        self.assertEqual(Complex.root(self.d, self.e), Complex.power(self.d, Complex.power(self.e,self.neg_one)))
+
+        # i√i = 4.810477380965351
+        self.assertEqual(Complex.root(self.i, self.i), Complex(4.810477380965351, 0))
         pass
+
 
     # test taking e to the power of a complex number
     def test_exp(self):
+        # identities
+
         pass
 
     # test taking natural log of a complex number
