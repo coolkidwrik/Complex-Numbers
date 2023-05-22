@@ -707,10 +707,10 @@ def erf_taylor_approx(c: Complex):
 
 
 # testing
-t1 = Complex("1 + i")
-t2 = Complex("3 + 4i")
+t1 = Complex(m.e, 0)
+t2 = Complex(0, m.pi)
 t3 = Complex.gamma(Complex("1 + i"))      # i! = 0.498015668 - 0.154949828i
-t4 = Complex.arctan(t1)
+t4 = Complex.power(t1, t2)
 # print(t1)
 # # print(t2)
 print(t4)

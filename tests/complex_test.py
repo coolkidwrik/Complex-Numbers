@@ -15,7 +15,8 @@ class TestComplex(t.TestCase):
         cls.pi = Complex(m.pi, 0)                   # pi
         cls.pi_over_two = Complex(m.pi / 2, 0)      # pi/2
         cls.pi_over_four = Complex(m.pi / 4, 0)     # pi/4
-        cls.neg_pi_over_two = Complex(-m.pi / 2, 0)  # -pi/2
+        cls.neg_pi_over_two = Complex(-m.pi / 2, 0) # -pi/2
+        cls.E = Complex(m.e, 0)                    # e
         cls.a = Complex(1, 1)          # 1 + i
         cls.b = Complex(1, -1)         # 1 - i
         cls.c = Complex(-1, 1)         # -1 + i
@@ -192,40 +193,55 @@ class TestComplex(t.TestCase):
 
     # test taking a complex power of complex numbers
     def test_power(self):
-        # dividing real and imaginary components
-        self.assertEqual(Complex.div(self.i, self.one), self.i)
-        self.assertEqual(Complex.div(self.one, self.i), self.neg_i)
-        self.assertEqual(Complex.div(self.one, self.neg_i), self.i)
-        self.assertEqual(Complex.div(self.neg_i, self.one), self.neg_i)
-        self.assertEqual(Complex.div(self.neg_one, self.i), self.i)
-        self.assertEqual(Complex.div(self.neg_one, self.neg_i), self.neg_i)
-        # dividing only real numbers
         two = Complex(2, 0)
         three = Complex(3, 0)
-        six = Complex(6, 0)
-        self.assertEqual(Complex.div(self.one, self.one), self.one)
-        self.assertEqual(Complex.div(self.one, self.neg_one), self.neg_one)
-        self.assertEqual(Complex.div(self.neg_one, self.one), self.neg_one)
-        self.assertEqual(Complex.div(two, three), Complex(2 / 3, 0))
-        self.assertEqual(Complex.div(six, three), two)
-        # dividing only imaginary numbers
-        i_to_the_0 = Complex.div(self.i, self.i)
-        i_to_the_neg_one = Complex.div(i_to_the_0, self.i)
-        i_to_the_neg_two = Complex.div(i_to_the_neg_one, self.i)
-        i_to_the_neg_three = Complex.div(i_to_the_neg_two, self.i)
+        four = Complex(4, 0)
+        five = Complex(5, 0)
 
+        # test with real base and exponent
+        self.assertEqual(Complex.power(self.one, self.one), self.one)
+        self.assertEqual(Complex.power(self.one, self.neg_one), self.one)
+        self.assertEqual(Complex.power(self.one, two), self.one)
+        self.assertEqual(Complex.power(self.neg_one, self.one), self.neg_one)
+        self.assertEqual(Complex.power(self.neg_one, two), self.one)
+        self.assertEqual(Complex.power(self.neg_one, three), self.neg_one)
+        self.assertEqual(Complex.power(two, three), Complex(8, 0))
+        self.assertEqual(Complex.power(three, two), Complex(9, 0))
+        self.assertEqual(Complex.power(two, two), Complex(4, 0))
+        self.assertEqual(Complex.power(three, three), Complex(27, 0))
+        # test with real base and imaginary exponent
+            #e^(ipi) = -1
+        ipi = Complex.mult(self.pi, self.i)
+        self.assertEqual(Complex.power(self.E, ipi), self.neg_one)
+
+        # test with imaginary base and real exponent
+        i_to_the_0 = Complex.power(self.i, self.zero)
+        i_squared = Complex.power(self.i, two)
+        i_cubed = Complex.power(self.i, three)
+        i_to_the_fourth = Complex.power(self.i, four)
+        i_to_the_fifth = Complex.power(self.i, five)
         i3 = Complex(0, 3)
-        i4 = Complex(0, 4)
+
         self.assertEqual(i_to_the_0, self.one)
-        self.assertEqual(i_to_the_neg_one, self.neg_i)
-        self.assertEqual(i_to_the_neg_two, self.neg_one)
-        self.assertEqual(i_to_the_neg_three, self.i)
-        self.assertEqual(Complex.div(i3, i4), Complex(3 / 4, 0))
-        # dividing complex numbers
-        self.assertEqual(Complex.div(self.a, self.a), self.one)
-        self.assertEqual(Complex.div(self.a, self.b), self.i)
-        self.assertEqual(Complex.div(self.a, self.c), self.neg_i)
-        self.assertEqual(Complex.div(self.d, self.e), Complex(-0.14285714285714285, 0.2857142857142857))
+        self.assertEqual(i_squared, self.neg_one)
+        self.assertEqual(i_cubed, self.neg_i)
+        self.assertEqual(i_to_the_fourth, i_to_the_0)
+        self.assertEqual(i_to_the_fifth, self.i)
+        self.assertEqual(Complex.power(i3, self.one), i3)
+        self.assertEqual(Complex.power(i3, two), Complex(-9, 0))
+
+        # test with imaginary base and real exponent
+
+        # test with complex base and real exponent
+
+        # test with complex base and imaginary exponent
+
+        # test with real base and complex exponent
+
+        # test with imaginary base and complex exponent
+
+        # test with complex base and complex exponent
+        pass
 
     # test taking a complex root of complex numbers
     def test_root(self):
