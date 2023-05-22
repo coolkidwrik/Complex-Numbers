@@ -273,8 +273,15 @@ class TestComplex(t.TestCase):
         self.assertEqual(Complex.power(self.e, i3), Complex(-10.73357878989517, 25.536275610786227))
 
         # test with real base and complex exponent
+        self.assertEqual(Complex.power(self.one, self.a), self.one)
+        self.assertEqual(Complex.power(self.one, self.e), self.one)
+        self.assertEqual(Complex.power(two, self.b), Complex(1.5384778027279442, -1.2779225526272695))
+        self.assertEqual(Complex.power(three, self.c), Complex(0.15161080760886989, 0.296859013889249))
+        self.assertEqual(Complex.power(four, self.d), Complex(47.34786346201795, -43.06018840625417))
 
         # test with imaginary base and complex exponent
+        self.assertEqual(Complex.power(self.i, self.a), Complex(1.272895288930342e-17, 0.20787957635076193))
+        self.assertEqual(Complex.power(i3, self.d), Complex(-0.047893929427421704, 0.015762109683589577))
 
         # test with complex base and complex exponent
         self.assertEqual(Complex.power(self.a, self.a), Complex(0.2739572538301211, 0.5837007587586147))
