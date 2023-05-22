@@ -23,7 +23,11 @@ class TestComplex(t.TestCase):
         cls.d = Complex(3, 4)          # 3 + 4i
         cls.e = Complex(7, -14)        # 7 - 14i
 
+
+
+
     # testing
+
 
     # test for conjugate of a complex number
     def test_conjugate(self):
@@ -32,6 +36,7 @@ class TestComplex(t.TestCase):
         self.assertNotEqual(self.a.conjugate(), self.c)
         self.assertNotEqual(self.d.conjugate(), self.d)
 
+
     # test get_sign(gets the sign of the imaginary component)
     def test_get_sign(self):
         self.assertEqual(self.i.get_sign(), "+")
@@ -39,6 +44,7 @@ class TestComplex(t.TestCase):
         self.assertEqual(self.c.get_sign(), self.d.get_sign())
         self.assertNotEqual(self.a.conjugate().get_sign(), "+")
         self.assertNotEqual(self.d.get_sign(), self.e.get_sign())
+
 
     # test for argument of a complex number
     def test_arg(self):
@@ -50,6 +56,7 @@ class TestComplex(t.TestCase):
         self.assertEqual(self.a.arg(), self.pi_over_four)
         self.assertEqual(self.e.arg(), Complex(m.atan(-2), 0))
 
+
     # test to get the modulus of a complex number
     def test_mod(self):
         self.assertEqual(self.one.mod(), self.one)
@@ -59,6 +66,7 @@ class TestComplex(t.TestCase):
         self.assertEqual(self.a.mod(), Complex(m.sqrt(2), 0))
         self.assertEqual(self.d.mod(), Complex.root(Complex.mult(self.d, self.d.conjugate()), Complex(2, 0)))
 
+
     # test to convert rectangular form to euler form
     def test_rect_to_euler(self):
         self.assertEqual(self.zero.rect_to_euler(), "0")
@@ -66,6 +74,7 @@ class TestComplex(t.TestCase):
         self.assertEqual(self.i.rect_to_euler(), f"e^({self.pi_over_two.real}i)")
         self.assertEqual(self.a.rect_to_euler(), f"{m.sqrt(2)}e^({self.pi_over_four.real}i)")
         self.assertEqual(self.d.rect_to_euler(), f"{self.d.mod()}e^({self.d.arg()}i)")
+
 
     # test to convert rectangular form to cis form
     def test_rect_to_cis(self):
@@ -77,7 +86,11 @@ class TestComplex(t.TestCase):
         self.assertEqual(self.a.rect_to_cis(), f"{m.sqrt(2)}(cos({po4}) + isin({po4}))")
         self.assertEqual(self.d.rect_to_cis(), f"{self.d.mod()}(cos({self.d.arg()}) + isin({self.d.arg()}))")
 
+
+
+
     # test static methods
+
 
     # test adding two complex numbers
     def test_add(self):
@@ -120,6 +133,7 @@ class TestComplex(t.TestCase):
         self.assertEqual(Complex.sub(self.a, self.c), Complex(2, 0))
         self.assertEqual(Complex.sub(self.d, self.e), Complex(-4, 18))
 
+
     # test multiplying two complex numbers
     def test_mult(self):
         # multiplying real and imaginary components
@@ -153,6 +167,7 @@ class TestComplex(t.TestCase):
         self.assertEqual(Complex.mult(self.a, self.b), Complex(2, 0))
         self.assertEqual(Complex.mult(self.a, self.c), Complex(-2, 0))
         self.assertEqual(Complex.mult(self.d, self.e), Complex(77, -14))
+
 
     # test dividing two complex numbers
     def test_div(self):
@@ -191,6 +206,7 @@ class TestComplex(t.TestCase):
         self.assertEqual(Complex.div(self.a, self.c), self.neg_i)
         self.assertEqual(Complex.div(self.d, self.e), Complex(-0.14285714285714285, 0.2857142857142857))
 
+
     # test taking a complex power of complex numbers
     def test_power(self):
         two = Complex(2, 0)
@@ -209,10 +225,17 @@ class TestComplex(t.TestCase):
         self.assertEqual(Complex.power(three, two), Complex(9, 0))
         self.assertEqual(Complex.power(two, two), Complex(4, 0))
         self.assertEqual(Complex.power(three, three), Complex(27, 0))
+
         # test with real base and imaginary exponent
-            #e^(ipi) = -1
         ipi = Complex.mult(self.pi, self.i)
+        ipi_over_two = Complex.mult(self.pi_over_two, self.i)
+        self.assertEqual(Complex.power(self.one, ipi), self.one)
+        self.assertEqual(Complex.power(two, ipi), Complex(-0.5702332487688776, 0.8214828312256388))
+        self.assertEqual(Complex.power(self.one, ipi_over_two), self.one)
+            # e^(ipi) = -1
         self.assertEqual(Complex.power(self.E, ipi), self.neg_one)
+            # e^(ipi/2) = i
+        self.assertEqual(Complex.power(self.E, ipi_over_two), self.i)
 
         # test with imaginary base and real exponent
         i_to_the_0 = Complex.power(self.i, self.zero)
@@ -230,18 +253,34 @@ class TestComplex(t.TestCase):
         self.assertEqual(Complex.power(i3, self.one), i3)
         self.assertEqual(Complex.power(i3, two), Complex(-9, 0))
 
-        # test with imaginary base and real exponent
+        # test with imaginary base and exponent
+        self.assertEqual(Complex.power(i3, self.i), Complex(0.09455037136778624, 0.18513277812960613))
+            # i^i = 0.20787957635076193
+        self.assertEqual(Complex.power(self.i, self.i), Complex(0.20787957635076193, 0))
 
         # test with complex base and real exponent
+        self.assertEqual(Complex.power(self.a, two), Complex(0, 2))
+        self.assertEqual(Complex.power(self.a, three), Complex(-2, 2))
+        self.assertEqual(Complex.power(self.b, three), Complex(-2, -2))
+        self.assertEqual(Complex.power(self.c, three), Complex(2, 2))
+        self.assertEqual(Complex.power(self.e, three), Complex(-3773, 686))
 
         # test with complex base and imaginary exponent
+        self.assertEqual(Complex.power(self.a, self.i), Complex(0.4288290062943679, 0.1548717524642468))
+        self.assertEqual(Complex.power(self.a, self.neg_i), Complex(2.0628722350809046, -0.745007062179724))
+        self.assertEqual(Complex.power(self.b, self.i), Complex(2.0628722350809046, 0.745007062179724))
+        self.assertEqual(Complex.power(self.c, i3), Complex(0.0004312203536189743, 0.000734163645397619))
+        self.assertEqual(Complex.power(self.e, i3), Complex(-10.73357878989517, 25.536275610786227))
 
         # test with real base and complex exponent
 
         # test with imaginary base and complex exponent
 
         # test with complex base and complex exponent
-        pass
+        self.assertEqual(Complex.power(self.a, self.a), Complex(0.2739572538301211, 0.5837007587586147))
+        self.assertEqual(Complex.power(self.a, self.b), Complex(2.8078792972606292, 1.3178651729011808))
+        self.assertEqual(Complex.power(self.e, self.d), Complex(55299.43691682981, 316620.1042138665))
+
 
     # test taking a complex root of complex numbers
     def test_root(self):

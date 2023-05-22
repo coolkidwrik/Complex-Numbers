@@ -35,7 +35,8 @@ class Complex (r.Real, imag.Imaginary):
     # overwrites the object classes equal function to compare complex numbers based on their
     # real and imaginary components
     def __eq__(self, other):
-        if self.real == other.real and self.imaginary == other.imaginary:
+        error = 1e-7
+        if abs(self.real - other.real) < error  and abs(self.imaginary - other.imaginary) < error:
             return True
         return False
 
