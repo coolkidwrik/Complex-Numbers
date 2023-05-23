@@ -345,24 +345,40 @@ class TestComplex(t.TestCase):
         neg_ipi_over_2 = Complex.mult(self.neg_pi_over_two, self.i)
         ipi = Complex.mult(self.pi, self.i)
 
+        self.assertEqual(Complex.natural_log(self.a), Complex(0.34657359027997264, 0.7853981633974483))
+        self.assertEqual(Complex.natural_log(self.b), Complex(0.34657359027997264, -0.7853981633974483))
+        self.assertEqual(Complex.natural_log(self.e), Complex(2.7506291052723637, -1.1071487177940904))
         # identities
             # ln(0) = undefined
         self.assertRaises(AssertionError, Complex.natural_log, self.zero)
 
-            # ln(-1) = 3.141592653589793i
+            # ln(-1) = ipi
         self.assertEqual(Complex.natural_log(self.neg_one), ipi)
             # ln(1) = 0
-
+        self.assertEqual(Complex.natural_log(self.one), self.zero)
             # ln(i) = ipi/2
-
+        self.assertEqual(Complex.natural_log(self.i), ipi_over_2)
             # ln(-i) = -ipi/2
-
-            # ln(-1) = ipi
+        self.assertEqual(Complex.natural_log(self.neg_i), neg_ipi_over_2)
 
 
     # test taking log of a complex number with a complex base
     def test_log(self):
-        pass
+        # derivative of natural_log function
+        # assertion error tests.
+        # test for base 0
+        self.assertRaises(AssertionError, Complex.log, self.one, self.zero)
+        # test for base 1
+        self.assertRaises(AssertionError, Complex.log, self.one, self.one)
+
+        # regular tests
+        self.assertEqual(Complex.log(self.a, self.i), Complex(0.5, -0.2206356001526516))
+        self.assertEqual(Complex.log(self.a, self.neg_i), Complex(-0.5, 0.2206356001526516))
+        self.assertEqual(Complex.log(self.a, self.neg_one), Complex(0.25, -0.1103178000763258))
+        self.assertEqual(Complex.log(self.b, self.i), Complex(-0.5, -0.2206356001526516))
+        self.assertEqual(Complex.log(self.b, self.neg_i), Complex(0.5, 0.2206356001526516))
+        self.assertEqual(Complex.log(self.d, self.b), Complex(-0.2313646183234306, 2.1512945377428627))
+        self.assertEqual(Complex.log(self.e, self.d), Complex(0.9855503329158666, -1.2557457563244918))
 
     # test trig functions
 

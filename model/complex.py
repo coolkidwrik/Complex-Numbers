@@ -186,7 +186,7 @@ class Complex (r.Real, imag.Imaginary):
     # the goal: ln(a + bi) = ln(r * e^(it)) = ln(r) + it
     @staticmethod
     def natural_log(c):
-        assert c != Complex(0, 0), "cannot take the log of 0"
+        assert c != zero, "cannot take the log of 0"
         real = m.log(c.mod().real, m.e)
         imaginary = c.arg().real
         return Complex(real, imaginary)
@@ -202,8 +202,9 @@ class Complex (r.Real, imag.Imaginary):
     # therefore log_b(c) = ln(c)/ln(b)
     @staticmethod
     def log(c, b):
-        assert c.real != 0 and c.imaginary != 0, "cannot take the log of 0"
-        assert b.real != 0 and b.imaginary != 0, "log with base 0 is not defined"
+        assert c != zero, "cannot take the log of 0"
+        assert b != zero, "log with base 0 is not defined"
+        assert b != one, "log with base 1 is not defined"
         ln_c = Complex.natural_log(c)
         ln_b = Complex.natural_log(b)
         result = Complex.div(ln_c, ln_b)
@@ -386,6 +387,7 @@ class Complex (r.Real, imag.Imaginary):
 
 
 # constants for functions
+zero = Complex(0, 0)                    # 0
 pi = Complex(m.pi, 0)                   # pi
 pi_over_two = Complex(m.pi / 2, 0)      # pi/2
 neg_pi_over_two = Complex(-m.pi / 2, 0)  # -pi/2
