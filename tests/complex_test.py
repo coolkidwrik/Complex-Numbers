@@ -12,10 +12,10 @@ class TestComplex(t.TestCase):
         cls.neg_one = Complex(-1, 0)   # -1
         cls.i = Complex(0, 1)          # i
         cls.neg_i = Complex(0, -1)     # -i
-        cls.pi = Complex(m.pi, 0)                   # pi
-        cls.pi_over_two = Complex(m.pi / 2, 0)      # pi/2
-        cls.pi_over_four = Complex(m.pi / 4, 0)     # pi/4
-        cls.neg_pi_over_two = Complex(-m.pi / 2, 0) # -pi/2
+        cls.pi = Complex(m.pi, 0)                   # π
+        cls.pi_over_two = Complex(m.pi / 2, 0)      # π/2
+        cls.pi_over_four = Complex(m.pi / 4, 0)     # π/4
+        cls.neg_pi_over_two = Complex(-m.pi / 2, 0) # -π/2
         cls.E = Complex(m.e, 0)                    # e
         cls.a = Complex(1, 1)          # 1 + i
         cls.b = Complex(1, -1)         # 1 - i
@@ -236,9 +236,9 @@ class TestComplex(t.TestCase):
         self.assertEqual(Complex.power(self.one, ipi), self.one)
         self.assertEqual(Complex.power(two, ipi), Complex(-0.5702332487688776, 0.8214828312256388))
         self.assertEqual(Complex.power(self.one, ipi_over_two), self.one)
-            # e^(ipi) = -1
+            # e^(iπ) = -1
         self.assertEqual(Complex.power(self.E, ipi), self.neg_one)
-            # e^(ipi/2) = i
+            # e^(iπ/2) = i
         self.assertEqual(Complex.power(self.E, ipi_over_two), self.i)
 
         # test with imaginary base and real exponent
@@ -327,13 +327,13 @@ class TestComplex(t.TestCase):
         self.assertEqual(Complex.exp(self.one), self.E)
             # e^0 = 1
         self.assertEqual(Complex.exp(self.zero), self.one)
-            # e^(ipi/2) = i
+            # e^(iπ/2) = i
         ipi_over_2 = Complex.mult(self.pi_over_two, self.i)
         self.assertEqual(Complex.exp(ipi_over_2), self.i)
-            # e^(-ipi/2) = -i
+            # e^(-iπ/2) = -i
         neg_ipi_over_2 = Complex.mult(self.neg_pi_over_two, self.i)
         self.assertEqual(Complex.exp(neg_ipi_over_2), self.neg_i)
-            # e^(ipi) = -1
+            # e^(iπ) = -1
         ipi = Complex.mult(self.pi, self.i)
         neg_ipi = Complex.mult(self.pi, self.neg_i)
         self.assertEqual(Complex.exp(ipi), self.neg_one)
@@ -352,13 +352,13 @@ class TestComplex(t.TestCase):
             # ln(0) = undefined
         self.assertRaises(AssertionError, Complex.natural_log, self.zero)
 
-            # ln(-1) = ipi
+            # ln(-1) = iπ
         self.assertEqual(Complex.natural_log(self.neg_one), ipi)
             # ln(1) = 0
         self.assertEqual(Complex.natural_log(self.one), self.zero)
-            # ln(i) = ipi/2
+            # ln(i) = iπ/2
         self.assertEqual(Complex.natural_log(self.i), ipi_over_2)
-            # ln(-i) = -ipi/2
+            # ln(-i) = -iπ/2
         self.assertEqual(Complex.natural_log(self.neg_i), neg_ipi_over_2)
 
 
@@ -384,26 +384,59 @@ class TestComplex(t.TestCase):
 
     # test taking sine of a complex number
     def test_sin(self):
+        # identities
+            # sin(0) = 0
+
+            # sin(π/2) = 1
+
+            # sin(π/4) = 1/√(2)
+
+            # sin(-π/2) = -1
+
+            # sin(π) = 0
         pass
 
     # test taking cosine of a complex number
     def test_cos(self):
+        # identities
+            # cos(0) = 1
+
+            # cos(π/2) = 0
+
+            # cos(π/4) = 1/√(2)
+
+            # cos(-π/2) = 0
+
+            # cos(π) = -1
         pass
 
     # test taking tangent of a complex number
     def test_tan(self):
+        # identities
+        # tan(0) = 0
+
+        # tan(π/2) = √(3)
+
+        # tan(π/4) = 1
+
+        # tan(-π/2) = 1/√(3)
+
+        # tan(π) = 0
         pass
 
     # test taking cosecant of a complex number
     def test_csc(self):
+        # derivative of the sine function
         pass
 
     # test taking secant of a complex number
     def test_sec(self):
+        # derivative of the cosine function
         pass
 
     # test taking cotangent of a complex number
     def test_cot(self):
+        # derivative of the tangent function
         pass
 
     # test taking hyperbolic sine of a complex number
