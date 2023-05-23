@@ -441,6 +441,16 @@ class TestComplex(t.TestCase):
 
     # test taking hyperbolic sine of a complex number
     def test_sinh(self):
+        # identities
+        # tan(0) = 0
+
+        # tan(π/2) = √(3)
+
+        # tan(π/4) = 1
+
+        # tan(-π/2) = 1/√(3)
+
+        # tan(π) = 0
         pass
 
     # test taking hyperbolic cosine of a complex number
@@ -468,6 +478,19 @@ class TestComplex(t.TestCase):
 
     # test taking inverse  sine of a complex number
     def test_gamma(self):
+        # test for singularities
+            # Γ(0) = undefined, even if 0! = 1
+        self.assertRaises(ValueError, Complex.gamma, self.zero)
+        self.assertRaises(ValueError, Complex.gamma, self.neg_one)
+        # test for real integers
+            # Γ(1) = 1
+       # self.assertEqual(Complex.gamma(self.one).real, factorial(self.one))
+            # Γ(10 + 1) = 10!
+        self.assertEqual(Complex.gamma(Complex(11, 0)).real, float(factorial(Complex(10, 0))))
+        # rough test
+        test = Complex.gamma(self.i)
+        self.assertNotEqual(test.real, 0)
+        self.assertNotEqual(test.imaginary, 0)
         pass
 
     # test taking inverse  cosine of a complex number
@@ -478,5 +501,16 @@ class TestComplex(t.TestCase):
     def test_erfi(self):
         pass
 
+
+# recursive, helper, factorial function to test gamma function
+def factorial(c: Complex):
+    assert c.imaginary == 0, "must be a real number"
+    num = c.real
+    assert type(num) == int, "must be an integer"
+
+    if num == 1:
+        return 1
+    else:
+        return num * factorial(Complex(num-1, 0))
 
 
