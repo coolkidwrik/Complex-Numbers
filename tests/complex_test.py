@@ -437,6 +437,7 @@ class TestComplex(t.TestCase):
     # test taking cosecant of a complex number
     def test_csc(self):
         # derivative of the sine function
+
         self.assertEqual(Complex.csc(self.a), Complex(0.6215180171704284, -0.30393100162842646))
         self.assertEqual(Complex.csc(self.b), Complex(0.6215180171704284, 0.30393100162842646))
         self.assertEqual(Complex.csc(self.d), Complex(0.005174473184019397, 0.03627588962862601))
@@ -447,6 +448,7 @@ class TestComplex(t.TestCase):
     # test taking secant of a complex number
     def test_sec(self):
         # derivative of the cosine function
+
         self.assertEqual(Complex.sec(self.a), Complex(0.49833703055518686, 0.5910838417210451))
         self.assertEqual(Complex.sec(self.b), Complex(0.49833703055518686, -0.5910838417210451))
         self.assertEqual(Complex.sec(self.d), Complex(-0.03625349691586887, 0.00516434460775318))
@@ -457,6 +459,7 @@ class TestComplex(t.TestCase):
     # test taking cotangent of a complex number
     def test_cot(self):
         # derivative of the tangent function
+
         self.assertEqual(Complex.cot(self.a), Complex(0.21762156185440273, -0.8680141428959249))
         self.assertEqual(Complex.cot(self.b), Complex(0.21762156185440273, 0.8680141428959249))
         self.assertEqual(Complex.cot(self.d), Complex(-0.0001875877379836592, -1.0006443924715591))
@@ -466,25 +469,36 @@ class TestComplex(t.TestCase):
 
     # test taking hyperbolic sine of a complex number
     def test_sinh(self):
+        ipi_over_2 = Complex.mult(self.pi_over_two, self.i)
         # identities
-        # tan(0) = 0
-
-        # tan(π/2) = √(3)
-
-        # tan(π/4) = 1
-
-        # tan(-π/2) = 1/√(3)
-
-        # tan(π) = 0
-        pass
+            # sinh(0) = 0
+        self.assertEqual(Complex.sinh(self.zero), self.zero)
+            # sinh(iπ/2) = i
+        self.assertEqual(Complex.sinh(ipi_over_2), self.i)
+        # general test
+        self.assertEqual(Complex.sinh(self.a), Complex(0.6349639147847361, 1.2984575814159773))
 
     # test taking hyperbolic cosine of a complex number
     def test_cosh(self):
-        pass
+        ipi_over_2 = Complex.mult(self.pi_over_two, self.i)
+        # identities
+            # cosh(0) = 1
+        self.assertEqual(Complex.cosh(self.zero), self.one)
+            # cosh(iπ/2) = 0
+        self.assertEqual(Complex.cosh(ipi_over_2), self.zero)
+        # general test
+        self.assertEqual(Complex.cosh(self.a), Complex(0.8337300251311491, 0.9888977057628651))
 
     # test taking hyperbolic tangent of a complex number
     def test_tanh(self):
-        pass
+        ipi_over_2 = Complex.mult(self.pi_over_two, self.i)
+        # test for singularities
+        self.assertRaises(AssertionError, Complex.tanh, ipi_over_2)
+        # identities
+            # tanh(0) = 0
+        self.assertEqual(Complex.tanh(self.zero), self.zero)
+        # general test
+        self.assertEqual(Complex.tanh(self.a), Complex(1.0839233273386946, 0.2717525853195118))
 
     # test taking inverse  sine of a complex number
     def test_arcsin(self):

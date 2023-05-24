@@ -9,5 +9,5 @@ t6 = m.pi/2
 print(1/m.cos(t1))
 print(1/m.cos(t2))
 print(1/m.cos(t4))
-print(1/m.tan(t6))
+print(m.tanh(t1))
 
