@@ -384,60 +384,85 @@ class TestComplex(t.TestCase):
 
     # test taking sine of a complex number
     def test_sin(self):
+        self.assertEqual(Complex.sin(self.a), Complex(1.2984575814159773, 0.6349639147847361))
+        self.assertEqual(Complex.sin(self.b), Complex(1.2984575814159773, -0.6349639147847361))
+        self.assertEqual(Complex.sin(self.d), Complex(3.853738037919377, -27.016813258003936))
         # identities
             # sin(0) = 0
-
+        self.assertEqual(Complex.sin(self.zero), self.zero)
             # sin(π/2) = 1
-
+        self.assertEqual(Complex.sin(self.pi_over_two), self.one)
             # sin(π/4) = 1/√(2)
-
+        self.assertEqual(Complex.sin(self.pi_over_four), Complex(0.7071067811865475, 0))
             # sin(-π/2) = -1
-
+        self.assertEqual(Complex.sin(self.neg_pi_over_two), self.neg_one)
             # sin(π) = 0
-        pass
+        self.assertEqual(Complex.sin(self.pi), self.zero)
 
     # test taking cosine of a complex number
     def test_cos(self):
+        self.assertEqual(Complex.cos(self.a), Complex(0.8337300251311491, -0.9888977057628651))
+        self.assertEqual(Complex.cos(self.b), Complex(0.8337300251311491, 0.9888977057628651))
+        self.assertEqual(Complex.cos(self.d), Complex(-27.034945603074224, -3.8511533348117775))
         # identities
             # cos(0) = 1
-
+        self.assertEqual(Complex.cos(self.zero), self.one)
             # cos(π/2) = 0
-
+        self.assertEqual(Complex.cos(self.pi_over_two), self.zero)
             # cos(π/4) = 1/√(2)
-
+        self.assertEqual(Complex.cos(self.pi_over_four), Complex(0.7071067811865475, 0))
             # cos(-π/2) = 0
-
+        self.assertEqual(Complex.cos(self.neg_pi_over_two), self.zero)
             # cos(π) = -1
-        pass
+        self.assertEqual(Complex.cos(self.pi), self.neg_one)
 
     # test taking tangent of a complex number
     def test_tan(self):
+        # derivative of sine and cosine
+        self.assertEqual(Complex.tan(self.a), Complex(0.2717525853195118, 1.0839233273386946))
+        self.assertEqual(Complex.tan(self.b), Complex(0.2717525853195118, -1.0839233273386946))
+        self.assertEqual(Complex.tan(self.d), Complex(-0.0001873462046294784, 0.999355987381473))
+        # test for singularities
+        self.assertRaises(AssertionError, Complex.tan, self.pi_over_two)
+        self.assertRaises(AssertionError, Complex.tan, self.neg_pi_over_two)
+
         # identities
         # tan(0) = 0
-
-        # tan(π/2) = √(3)
-
+        self.assertEqual(Complex.tan(self.zero), self.zero)
         # tan(π/4) = 1
-
-        # tan(-π/2) = 1/√(3)
-
+        self.assertEqual(Complex.tan(self.pi_over_four), self.one)
         # tan(π) = 0
-        pass
+        self.assertEqual(Complex.tan(self.pi), self.zero)
 
     # test taking cosecant of a complex number
     def test_csc(self):
         # derivative of the sine function
-        pass
+        self.assertEqual(Complex.csc(self.a), Complex(0.2717525853195118, 1.0839233273386946))
+        self.assertEqual(Complex.csc(self.b), Complex(0.2717525853195118, -1.0839233273386946))
+        self.assertEqual(Complex.csc(self.d), Complex(-0.0001873462046294784, 0.999355987381473))
+        # test for singularities
+        self.assertRaises(AssertionError, Complex.csc, self.pi_over_two)
+        self.assertRaises(AssertionError, Complex.csc, self.neg_pi_over_two)
 
     # test taking secant of a complex number
     def test_sec(self):
         # derivative of the cosine function
-        pass
+        self.assertEqual(Complex.sec(self.a), Complex(0.2717525853195118, 1.0839233273386946))
+        self.assertEqual(Complex.sec(self.b), Complex(0.2717525853195118, -1.0839233273386946))
+        self.assertEqual(Complex.sec(self.d), Complex(-0.0001873462046294784, 0.999355987381473))
+        # test for singularities
+        self.assertRaises(AssertionError, Complex.sec, self.pi_over_two)
+        self.assertRaises(AssertionError, Complex.sec, self.neg_pi_over_two)
 
     # test taking cotangent of a complex number
     def test_cot(self):
         # derivative of the tangent function
-        pass
+        self.assertEqual(Complex.cot(self.a), Complex(0.2717525853195118, 1.0839233273386946))
+        self.assertEqual(Complex.cot(self.b), Complex(0.2717525853195118, -1.0839233273386946))
+        self.assertEqual(Complex.cot(self.d), Complex(-0.0001873462046294784, 0.999355987381473))
+        # test for singularities
+        self.assertRaises(AssertionError, Complex.cot, self.pi_over_two)
+        self.assertRaises(AssertionError, Complex.cot, self.neg_pi_over_two)
 
     # test taking hyperbolic sine of a complex number
     def test_sinh(self):
@@ -483,8 +508,8 @@ class TestComplex(t.TestCase):
         self.assertRaises(ValueError, Complex.gamma, self.zero)
         self.assertRaises(ValueError, Complex.gamma, self.neg_one)
         # test for real integers
-            # Γ(1) = 1
-       # self.assertEqual(Complex.gamma(self.one).real, factorial(self.one))
+            # Γ(1) = 0!
+        self.assertEqual(Complex.gamma(self.one).real, factorial(self.zero))
             # Γ(10 + 1) = 10!
         self.assertEqual(Complex.gamma(Complex(11, 0)).real, float(factorial(Complex(10, 0))))
         # rough test
@@ -508,7 +533,7 @@ def factorial(c: Complex):
     num = c.real
     assert type(num) == int, "must be an integer"
 
-    if num == 1:
+    if num == 0:
         return 1
     else:
         return num * factorial(Complex(num-1, 0))
