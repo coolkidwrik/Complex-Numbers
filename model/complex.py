@@ -711,7 +711,6 @@ def erf_taylor_approx(c: Complex):
     result = Complex.div(result, sqrt_pi)
     return Complex(result.real*2, result.imaginary*2)
 
-
 # testing
 t1 = Complex(m.e, 0)
 t2 = Complex(0, m.pi)

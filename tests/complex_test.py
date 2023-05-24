@@ -488,15 +488,42 @@ class TestComplex(t.TestCase):
 
     # test taking inverse  sine of a complex number
     def test_arcsin(self):
-        pass
+        # identities
+            # arc-sin(0) = 0
+        self.assertEqual(Complex.arcsin(self.zero), self.zero)
+            # arc-sin(1) = π/2
+        self.assertEqual(Complex.arcsin(self.one), self.pi_over_two)
+            # arc-sin(-1) = -π/2
+        self.assertEqual(Complex.arcsin(self.neg_one), self.neg_pi_over_two)
+            # arc-sin(2) = π/2 - iln(2 + √(3))
+        ans = Complex(m.pi/2, -m.log(2 + m.sqrt(3),m.e))
+        self.assertEqual(Complex.arcsin(Complex(2, 0)), ans)
 
     # test taking inverse  cosine of a complex number
     def test_arccos(self):
-        pass
+        # identities
+            # arc-cos(0) = π/2
+        self.assertEqual(Complex.arccos(self.zero), self.pi_over_two)
+            # arc-cos(1) = 0
+        self.assertEqual(Complex.arccos(self.one), self.zero)
+            # arc-cos(-1) = π
+        self.assertEqual(Complex.arccos(self.neg_one), self.pi)
+            # arc-cos(2) = iln(2 + √(3))
+        ans = Complex(0, m.log(2 - m.sqrt(3), m.e))
+        self.assertEqual(Complex.arccos(Complex(2, 0)), ans)
 
     # test taking inverse tangent of a complex number
     def test_arctan(self):
-        pass
+        # identities
+            # arc-tan(0) = 0
+        self.assertEqual(Complex.arctan(self.zero), self.zero)
+            # arc-tan(1) = π/4
+        self.assertEqual(Complex.arctan(self.one), self.pi_over_four)
+            # arc-tan(-1) = -π/4
+        self.assertEqual(Complex.arctan(self.neg_one), Complex(-self.pi_over_four.real, 0))
+            # arc-tan(2 + i) = (3π/8) + iln(2)/4
+        ans = Complex(3*m.pi/8, m.log(2, m.e)/4)
+        self.assertEqual(Complex.arctan(Complex(2, 1)), ans)
 
 
     # test for non-elementary functions
