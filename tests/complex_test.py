@@ -561,11 +561,25 @@ class TestComplex(t.TestCase):
 
     # test taking inverse  cosine of a complex number
     def test_erf(self):
-        pass
+        self.assertEqual(Complex.erf(self.zero), self.zero)
+        # rough test
+        test = Complex.erf(self.i)
+        self.assertEqual(test.real, 0)
+        self.assertNotEqual(test.imaginary, 0)
+        # exact test with erfi(x)
+            # erf(i) = ierfi(1)
+        self.assertEqual(test, Complex.mult(self.i, Complex.erf_i(self.one)))
 
     # test taking inverse tangent of a complex number
     def test_erfi(self):
-        pass
+        self.assertEqual(Complex.erf_i(self.zero), self.zero)
+        # rough test
+        test = Complex.erf_i(self.i)
+        self.assertEqual(test.real, 0)
+        self.assertNotEqual(test.imaginary, 0)
+        # exact test with erfi(x)
+            # erfi(i) = ierf(1)
+        self.assertEqual(test, Complex.mult(self.i, Complex.erf(self.one)))
 
 
 # recursive, helper, factorial function to test gamma function
