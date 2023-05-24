@@ -461,8 +461,8 @@ class TestComplex(t.TestCase):
         self.assertEqual(Complex.cot(self.b), Complex(0.21762156185440273, 0.8680141428959249))
         self.assertEqual(Complex.cot(self.d), Complex(-0.0001875877379836592, -1.0006443924715591))
         # test for singularities
-        self.assertRaises(AssertionError, Complex.cot, self.pi_over_two)
-        self.assertRaises(AssertionError, Complex.cot, self.neg_pi_over_two)
+        self.assertRaises(AssertionError, Complex.cot, self.zero)
+        self.assertRaises(AssertionError, Complex.cot, self.pi)
 
     # test taking hyperbolic sine of a complex number
     def test_sinh(self):
