@@ -437,19 +437,19 @@ class TestComplex(t.TestCase):
     # test taking cosecant of a complex number
     def test_csc(self):
         # derivative of the sine function
-        self.assertEqual(Complex.csc(self.a), Complex(0.2717525853195118, 1.0839233273386946))
-        self.assertEqual(Complex.csc(self.b), Complex(0.2717525853195118, -1.0839233273386946))
-        self.assertEqual(Complex.csc(self.d), Complex(-0.0001873462046294784, 0.999355987381473))
+        self.assertEqual(Complex.csc(self.a), Complex(0.6215180171704284, -0.30393100162842646))
+        self.assertEqual(Complex.csc(self.b), Complex(0.6215180171704284, 0.30393100162842646))
+        self.assertEqual(Complex.csc(self.d), Complex(0.005174473184019397, 0.03627588962862601))
         # test for singularities
-        self.assertRaises(AssertionError, Complex.csc, self.pi_over_two)
-        self.assertRaises(AssertionError, Complex.csc, self.neg_pi_over_two)
+        self.assertRaises(AssertionError, Complex.csc, self.zero)
+        self.assertRaises(AssertionError, Complex.csc, self.pi)
 
     # test taking secant of a complex number
     def test_sec(self):
         # derivative of the cosine function
-        self.assertEqual(Complex.sec(self.a), Complex(0.2717525853195118, 1.0839233273386946))
-        self.assertEqual(Complex.sec(self.b), Complex(0.2717525853195118, -1.0839233273386946))
-        self.assertEqual(Complex.sec(self.d), Complex(-0.0001873462046294784, 0.999355987381473))
+        self.assertEqual(Complex.sec(self.a), Complex(0.49833703055518686, 0.5910838417210451))
+        self.assertEqual(Complex.sec(self.b), Complex(0.49833703055518686, -0.5910838417210451))
+        self.assertEqual(Complex.sec(self.d), Complex(-0.03625349691586887, 0.00516434460775318))
         # test for singularities
         self.assertRaises(AssertionError, Complex.sec, self.pi_over_two)
         self.assertRaises(AssertionError, Complex.sec, self.neg_pi_over_two)
@@ -457,9 +457,9 @@ class TestComplex(t.TestCase):
     # test taking cotangent of a complex number
     def test_cot(self):
         # derivative of the tangent function
-        self.assertEqual(Complex.cot(self.a), Complex(0.2717525853195118, 1.0839233273386946))
-        self.assertEqual(Complex.cot(self.b), Complex(0.2717525853195118, -1.0839233273386946))
-        self.assertEqual(Complex.cot(self.d), Complex(-0.0001873462046294784, 0.999355987381473))
+        self.assertEqual(Complex.cot(self.a), Complex(0.21762156185440273, -0.8680141428959249))
+        self.assertEqual(Complex.cot(self.b), Complex(0.21762156185440273, 0.8680141428959249))
+        self.assertEqual(Complex.cot(self.d), Complex(-0.0001875877379836592, -1.0006443924715591))
         # test for singularities
         self.assertRaises(AssertionError, Complex.cot, self.pi_over_two)
         self.assertRaises(AssertionError, Complex.cot, self.neg_pi_over_two)

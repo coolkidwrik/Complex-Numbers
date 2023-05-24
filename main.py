@@ -6,7 +6,7 @@ t3 = -1 + 1j
 t4 = 3 + 4j
 t5 = 7 - 14j
 t6 = m.pi*t1
-print(m.tan(t1))
-print(m.tan(t2))
-print(m.tan(t4))
+print(1/m.cos(t1))
+print(1/m.cos(t2))
+print(1/m.cos(t4))
 
