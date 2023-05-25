@@ -18,6 +18,8 @@ and many other results that would normally return errors on normal calculators.
 All mathematical definitions for this project were derived from scratch and implemented into the python code. There is no use of of Python's cmath library; All complex numbers are coded from scratch using OOP concepts.
 
 
-Derivations:
+*Derivations:*
+
+Many of the derivations are done and explained in the comments of the code. Here are some derivations that were too long to put in comments-
 
 
