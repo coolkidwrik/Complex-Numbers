@@ -204,8 +204,15 @@ def create_button(root: Tk, **kwargs):
 # function for lambdas
 
 def function_lambda(func, text: Entry):
-    ans = func(Complex(text.get())).__repr__()
-    text.delete(0, END)
-    text.insert(0, ans)
+    try:
+        ans = func(Complex(text.get())).__repr__()
+        text.delete(0, END)
+        text.insert(0, ans)
+    except ValueError:
+        text.delete(0, END)
+        text.insert(0, "Undefined")
+    except AssertionError:
+        text.delete(0, END)
+        text.insert(0, "Undefined")
 
 
