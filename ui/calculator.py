@@ -7,15 +7,21 @@ class Calculator:
     # initializes the screen
     def __init__(self):
         root = Tk()
-        set_frame(root)
+        text = set_text_box(root)
+        set_frame(root, text)
         root.mainloop()
 
-# sets up all necessary details associated with the current frame
-def set_frame(root: Tk):
-    set_frame_info(root)
-    set_buttons(root)
-    set_text_box(root)
 
+# sets up all necessary details associated with the current frame
+def set_frame(root: Tk, text: Entry):
+    set_frame_info(root)
+    set_buttons(root, text)
+
+def set_text_box(root: Tk):
+    # text = Text(root, width=17, height=1, font=("Comic Sans", 70), bg="#ffffff", fg="#000000")
+    text = Entry(root, width= 17, font=("Comic Sans", 70), bg="#ffffff", fg="#000000")
+    text.place(x=0, y=0)
+    return text
 
 # sets all base info of the frame
 def set_frame_info(root: Tk):
@@ -31,17 +37,13 @@ def set_icon(root: Tk):
     root.iconphoto(True, icon)
 
 # sets all the buttons on the frame
-def set_buttons(root: Tk):
-    place_num_buttons(root)
-    place_ops_buttons(root)
-    place_constants(root)
-
-def set_text_box(root: Tk):
-    text = Text(root, width=17, height=1, font=("Comic Sans", 70), bg="#ffffff", fg="#000000")
-    text.place(x=0, y=0)
+def set_buttons(root: Tk, text: Entry):
+    place_num_buttons(root, text)
+    place_ops_buttons(root, text)
+    place_constants(root, text)
 
 # places numbers in a 3x4 grid. Helper for set_buttons
-def place_num_buttons(root: Tk):
+def place_num_buttons(root: Tk, text: Entry):
     ini_x = 0
     ini_y = 100
     size = 100
@@ -70,21 +72,14 @@ def place_num_buttons(root: Tk):
     decimal_button.place(x=ini_x + size, y=ini_y + 3*size)
     equal_button.place(x=ini_x + 2*size, y=ini_y + 3*size)
 
-def place_ops_buttons(root: Tk):
-    ini_x = 310
-    ini_y = 100
+def place_ops_buttons(root: Tk, text: Entry):
     size = 100
+    place_bacic_ops(root, 310, 100, size, "#eaaef5", text)
+    place_other_ops(root, 410, 300, size, "#f56969", text)
+    place_trig_ops(root, 720, 100, size, "#eaaef5", text)
+    place_special_ops(root, 1030, 100, size, "#eaaef5", text)
 
-    place_bacic_ops(root, 310, 100, size, "#eaaef5")
-    place_other_ops(root, 410, 300, size, "#f56969")
-    place_trig_ops(root, 720, 100, size, "#eaaef5")
-    place_special_ops(root, 720, 100, size, "#eaaef5")
-
-    # gamma_button = create_button(root, text="Γ()", command=root.destroy, bg=bg, size=size)
-    # erf_button = create_button(root, text="erf()", command=root.destroy, bg=bg, size=size)
-    # erfi_button = create_button(root, text="erfi()", command=root.destroy, bg=bg, size=size)
-
-def place_constants(root: Tk):
+def place_constants(root: Tk, text: Entry):
     size = 100
     ini_x = 310
     ini_y = 400
@@ -99,8 +94,7 @@ def place_constants(root: Tk):
     phi_button.place(x=ini_x + 3*size, y=ini_y)
 
 
-
-def place_bacic_ops(root: Tk, ini_x: int, ini_y: int, size: int, bg: str):
+def place_bacic_ops(root: Tk, ini_x: int, ini_y: int, size: int, bg: str, text: Entry):
     plus_button = create_button(root, text="+", command=root.destroy, bg=bg, size=size)
     minus_button = create_button(root, text="-", command=root.destroy, bg=bg, size=size)
     mult_button = create_button(root, text="x", command=root.destroy, bg=bg, size=size)
@@ -120,7 +114,7 @@ def place_bacic_ops(root: Tk, ini_x: int, ini_y: int, size: int, bg: str):
     ln_button.place(x=ini_x + 3*size, y=ini_y + size)
     lg_button.place(x=ini_x, y=ini_y + 2*size)
 
-def place_other_ops(root: Tk, ini_x: int, ini_y: int, size: int, bg: str):
+def place_other_ops(root: Tk, ini_x: int, ini_y: int, size: int, bg: str, text: Entry):
     clear_button = create_button(root, text="AC", command=root.destroy, bg=bg, size=size)
     change_sign_button = create_button(root, text="+/-", command=root.destroy, bg=bg, size=size)
     percentage_button = create_button(root, text="%", command=root.destroy, bg=bg, size=size)
@@ -129,7 +123,7 @@ def place_other_ops(root: Tk, ini_x: int, ini_y: int, size: int, bg: str):
     percentage_button.place(x=ini_x + 2*size, y=ini_y)
 
 
-def place_trig_ops(root: Tk, ini_x: int, ini_y: int, size: int, bg: str):
+def place_trig_ops(root: Tk, ini_x: int, ini_y: int, size: int, bg: str, text: Entry):
     sin_button = create_button(root, text="sin(x)", command=root.destroy, bg=bg, size=size)
     cos_button = create_button(root, text="cos(x)", command=root.destroy, bg=bg, size=size)
     tan_button = create_button(root, text="tan(x)", command=root.destroy, bg=bg, size=size)
@@ -156,9 +150,13 @@ def place_trig_ops(root: Tk, ini_x: int, ini_y: int, size: int, bg: str):
     arc_cos_button.place(x=ini_x + size, y=ini_y + 3*size)
     arc_tan_button.place(x=ini_x + 2*size, y=ini_y + 3*size)
 
-def place_special_ops(root: Tk, ini_x: int, ini_y: int, size: int, bg: str):
-    pass
-
+def place_special_ops(root: Tk, ini_x: int, ini_y: int, size: int, bg: str, text: Entry):
+    gamma_button = create_button(root, text="Γ(x)", command=root.destroy, bg=bg, size=size)
+    erf_button = create_button(root, text="erf(x)", command=root.destroy, bg=bg, size=size)
+    erfi_button = create_button(root, text="erfi(x)", command=root.destroy, bg=bg, size=size)
+    gamma_button.place(x=ini_x, y=ini_y)
+    erf_button.place(x=ini_x, y=ini_y + size)
+    erfi_button.place(x=ini_x, y=ini_y + 2*size)
 
 def create_button(root: Tk, **kwargs):
     # for handling errors
@@ -182,3 +180,6 @@ def create_button(root: Tk, **kwargs):
                     font=("Comic Sans", 20),
                     command=kwargs['command'])
     return button
+
+def clear_text(root: Tk):
+    pass
