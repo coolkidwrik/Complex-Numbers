@@ -115,9 +115,9 @@ def place_bacic_ops(root: Tk, ini_x: int, ini_y: int, size: int, bg: str, text: 
     lg_button.place(x=ini_x, y=ini_y + 2*size)
 
 def place_other_ops(root: Tk, ini_x: int, ini_y: int, size: int, bg: str, text: Entry):
-    clear_button = create_button(root, text="AC", command=root.destroy, bg=bg, size=size)
+    clear_button = create_button(root, text="AC", command=lambda : text.delete(0, END), bg=bg, size=size)
     change_sign_button = create_button(root, text="+/-", command=root.destroy, bg=bg, size=size)
-    percentage_button = create_button(root, text="%", command=root.destroy, bg=bg, size=size)
+    percentage_button = create_button(root, text="%", command= root.destroy, bg=bg, size=size)
     clear_button.place(x=ini_x, y=ini_y)
     change_sign_button.place(x=ini_x + size, y=ini_y)
     percentage_button.place(x=ini_x + 2*size, y=ini_y)
