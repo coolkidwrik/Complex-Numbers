@@ -11,6 +11,8 @@ class Calculator:
         set_frame(root, text)
         root.mainloop()
 
+# entry constant
+inputs = []
 
 # sets up all necessary details associated with the current frame
 def set_frame(root: Tk, text: Entry):
@@ -25,7 +27,7 @@ def set_text_box(root: Tk):
 
 # sets all base info of the frame
 def set_frame_info(root: Tk):
-    root.geometry("1200x500")
+    root.geometry("1150x500")
     root.title("Calculator")
     set_icon(root)
     root.resizable(False, False)
@@ -47,17 +49,17 @@ def place_num_buttons(root: Tk, text: Entry):
     ini_x = 0
     ini_y = 100
     size = 100
-    one_button = create_button(root, text="1", command=root.destroy, bg="#daf5f3", size=size)
-    two_button = create_button(root, text="2", command=root.destroy, bg="#daf5f3", size=size)
-    three_button = create_button(root, text="3", command=root.destroy, bg="#daf5f3", size=size)
-    four_button = create_button(root, text="4", command=root.destroy, bg="#daf5f3", size=size)
-    five_button = create_button(root, text="5", command=root.destroy, bg="#daf5f3", size=size)
-    six_button = create_button(root, text="6", command=root.destroy, bg="#daf5f3", size=size)
-    seven_button = create_button(root, text="7", command=root.destroy, bg="#daf5f3", size=size)
-    eight_button = create_button(root, text="8", command=root.destroy, bg="#daf5f3", size=size)
-    nine_button = create_button(root, text="9", command=root.destroy, bg="#daf5f3", size=size)
-    zero_button = create_button(root, text="0", command=root.destroy, bg="#daf5f3", size=size)
-    decimal_button = create_button(root, text=".", command=root.destroy, bg="#daf5f3", size=size)
+    one_button = create_button(root, text="1", command=lambda: text.insert(END, "1"), bg="#daf5f3", size=size)
+    two_button = create_button(root, text="2", command=lambda: text.insert(END, "2"), bg="#daf5f3", size=size)
+    three_button = create_button(root, text="3", command=lambda: text.insert(END, "3"), bg="#daf5f3", size=size)
+    four_button = create_button(root, text="4", command=lambda: text.insert(END, "4"), bg="#daf5f3", size=size)
+    five_button = create_button(root, text="5", command=lambda: text.insert(END, "5"), bg="#daf5f3", size=size)
+    six_button = create_button(root, text="6", command=lambda: text.insert(END, "6"), bg="#daf5f3", size=size)
+    seven_button = create_button(root, text="7", command=lambda: text.insert(END, "7"), bg="#daf5f3", size=size)
+    eight_button = create_button(root, text="8", command=lambda: text.insert(END, "8"), bg="#daf5f3", size=size)
+    nine_button = create_button(root, text="9", command=lambda: text.insert(END, "9"), bg="#daf5f3", size=size)
+    zero_button = create_button(root, text="0", command=lambda: text.insert(END, "0"), bg="#daf5f3", size=size)
+    decimal_button = create_button(root, text=".", command=lambda: text.insert(END, "."), bg="#daf5f3", size=size)
     equal_button = create_button(root, text="=", command=root.destroy, bg="#daf5f3", size=size)
     one_button.place(x=ini_x, y=ini_y)
     two_button.place(x=ini_x + size, y=ini_y)
@@ -84,10 +86,11 @@ def place_constants(root: Tk, text: Entry):
     ini_x = 310
     ini_y = 400
     bg = "#a2dcf2"
-    i_button = create_button(root, text="i", command=root.destroy, bg=bg, size=size)
-    pi_button = create_button(root, text="π", command=root.destroy, bg=bg, size=size)
-    e_button = create_button(root, text="e", command=root.destroy, bg=bg, size=size)
-    phi_button = create_button(root, text="Φ", command=root.destroy, bg=bg, size=size)
+    i_button = create_button(root, text="i", command=lambda: text.insert(END, "i"), bg=bg, size=size)
+    # to be changed
+    pi_button = create_button(root, text="π", command=lambda: text.insert(END, "π"), bg=bg, size=size)
+    e_button = create_button(root, text="e", command=lambda: text.insert(END, "e"), bg=bg, size=size)
+    phi_button = create_button(root, text="Φ", command=lambda: text.insert(END, "Φ"), bg=bg, size=size)
     i_button.place(x=ini_x, y=ini_y)
     pi_button.place(x=ini_x + size, y=ini_y)
     e_button.place(x=ini_x + 2*size, y=ini_y)
@@ -101,8 +104,10 @@ def place_bacic_ops(root: Tk, ini_x: int, ini_y: int, size: int, bg: str, text: 
     div_button = create_button(root, text="÷", command=root.destroy, bg=bg, size=size)
     pow_button = create_button(root, text="^", command=root.destroy, bg=bg, size=size)
     root_button = create_button(root, text="√", command=root.destroy, bg=bg, size=size)
-    exp_button = create_button(root, text="eˣ", command=root.destroy, bg=bg, size=size)
-    ln_button = create_button(root, text="ln(x)", command=root.destroy, bg=bg, size=size)
+    exp_button = create_button(root, text="eˣ", command=lambda: function_lambda(Complex.exp, text),
+                               bg=bg, size=size)
+    ln_button = create_button(root, text="ln(x)", command=lambda: function_lambda(Complex.natural_log, text),
+                              bg=bg, size=size)
     lg_button = create_button(root, text="log(x, b)", command=root.destroy, bg=bg, size=size)
     plus_button.place(x=ini_x, y=ini_y)
     minus_button.place(x=ini_x + size, y=ini_y)
@@ -115,7 +120,7 @@ def place_bacic_ops(root: Tk, ini_x: int, ini_y: int, size: int, bg: str, text: 
     lg_button.place(x=ini_x, y=ini_y + 2*size)
 
 def place_other_ops(root: Tk, ini_x: int, ini_y: int, size: int, bg: str, text: Entry):
-    clear_button = create_button(root, text="AC", command=lambda : text.delete(0, END), bg=bg, size=size)
+    clear_button = create_button(root, text="AC", command=lambda: text.delete(0, END), bg=bg, size=size)
     change_sign_button = create_button(root, text="+/-", command=root.destroy, bg=bg, size=size)
     percentage_button = create_button(root, text="%", command= root.destroy, bg=bg, size=size)
     clear_button.place(x=ini_x, y=ini_y)
@@ -124,18 +129,30 @@ def place_other_ops(root: Tk, ini_x: int, ini_y: int, size: int, bg: str, text: 
 
 
 def place_trig_ops(root: Tk, ini_x: int, ini_y: int, size: int, bg: str, text: Entry):
-    sin_button = create_button(root, text="sin(x)", command=root.destroy, bg=bg, size=size)
-    cos_button = create_button(root, text="cos(x)", command=root.destroy, bg=bg, size=size)
-    tan_button = create_button(root, text="tan(x)", command=root.destroy, bg=bg, size=size)
-    csc_button = create_button(root, text="csc(x)", command=root.destroy, bg=bg, size=size)
-    sec_button = create_button(root, text="sec(x)", command=root.destroy, bg=bg, size=size)
-    cot_button = create_button(root, text="cot(x)", command=root.destroy, bg=bg, size=size)
-    sin_h_button = create_button(root, text="sinh(x)", command=root.destroy, bg=bg, size=size)
-    cos_h_button = create_button(root, text="cosh(x)", command=root.destroy, bg=bg, size=size)
-    tan_h_button = create_button(root, text="tanh(x)", command=root.destroy, bg=bg, size=size)
-    arc_sin_button = create_button(root, text="arcsin(x)", command=root.destroy, bg=bg, size=size)
-    arc_cos_button = create_button(root, text="arccos(x)", command=root.destroy, bg=bg, size=size)
-    arc_tan_button = create_button(root, text="arctan(x)", command=root.destroy, bg=bg, size=size)
+    sin_button = create_button(root, text="sin(x)", command=lambda: function_lambda(Complex.sin, text),
+                               bg=bg, size=size)
+    cos_button = create_button(root, text="cos(x)", command=lambda: function_lambda(Complex.cos, text),
+                               bg=bg, size=size)
+    tan_button = create_button(root, text="tan(x)", command=lambda: function_lambda(Complex.tan, text),
+                               bg=bg, size=size)
+    csc_button = create_button(root, text="csc(x)", command=lambda: function_lambda(Complex.csc, text),
+                               bg=bg, size=size)
+    sec_button = create_button(root, text="sec(x)", command=lambda: function_lambda(Complex.sec, text),
+                               bg=bg, size=size)
+    cot_button = create_button(root, text="cot(x)", command=lambda: function_lambda(Complex.cot, text),
+                               bg=bg, size=size)
+    sin_h_button = create_button(root, text="sinh(x)", command=lambda: function_lambda(Complex.sinh, text),
+                                 bg=bg, size=size)
+    cos_h_button = create_button(root, text="cosh(x)", command=lambda: function_lambda(Complex.cosh, text),
+                                 bg=bg, size=size)
+    tan_h_button = create_button(root, text="tanh(x)", command=lambda: function_lambda(Complex.tanh, text),
+                                 bg=bg, size=size)
+    arc_sin_button = create_button(root, text="arcsin(x)", command=lambda: function_lambda(Complex.arcsin, text),
+                                   bg=bg, size=size)
+    arc_cos_button = create_button(root, text="arccos(x)", command=lambda: function_lambda(Complex.arccos, text),
+                                   bg=bg, size=size)
+    arc_tan_button = create_button(root, text="arctan(x)", command=lambda: function_lambda(Complex.arctan, text),
+                                   bg=bg, size=size)
 
     sin_button.place(x=ini_x, y=ini_y)
     cos_button.place(x=ini_x + size, y=ini_y)
@@ -151,9 +168,12 @@ def place_trig_ops(root: Tk, ini_x: int, ini_y: int, size: int, bg: str, text: E
     arc_tan_button.place(x=ini_x + 2*size, y=ini_y + 3*size)
 
 def place_special_ops(root: Tk, ini_x: int, ini_y: int, size: int, bg: str, text: Entry):
-    gamma_button = create_button(root, text="Γ(x)", command=root.destroy, bg=bg, size=size)
-    erf_button = create_button(root, text="erf(x)", command=root.destroy, bg=bg, size=size)
-    erfi_button = create_button(root, text="erfi(x)", command=root.destroy, bg=bg, size=size)
+    gamma_button = create_button(root, text="Γ(x)", command=lambda: function_lambda(Complex.gamma, text),
+                                 bg=bg, size=size)
+    erf_button = create_button(root, text="erf(x)", command=lambda: function_lambda(Complex.erf, text),
+                               bg=bg, size=size)
+    erfi_button = create_button(root, text="erfi(x)", command=lambda: function_lambda(Complex.erf_i, text),
+                                bg=bg, size=size)
     gamma_button.place(x=ini_x, y=ini_y)
     erf_button.place(x=ini_x, y=ini_y + size)
     erfi_button.place(x=ini_x, y=ini_y + 2*size)
@@ -181,5 +201,11 @@ def create_button(root: Tk, **kwargs):
                     command=kwargs['command'])
     return button
 
-def clear_text(root: Tk):
-    pass
+# function for lambdas
+
+def function_lambda(func, text: Entry):
+    ans = func(Complex(text.get())).__repr__()
+    text.delete(0, END)
+    text.insert(0, ans)
+
+
