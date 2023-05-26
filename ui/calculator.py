@@ -276,7 +276,7 @@ def equal_lambda(text: Entry, press_down_buttons: dict):
             ans = Complex.mult(a, b).__repr__()
         elif op == "÷":
             ans = Complex.div(a, b).__repr__()
-        elif op == "+":
+        elif op == "^":
             ans = Complex.power(a, b).__repr__()
         elif op == "√":
             ans = Complex.root(a, b).__repr__()
