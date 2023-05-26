@@ -44,6 +44,7 @@ def set_buttons(root: Tk, text: Entry, press_down_buttons: dict):
     place_num_buttons(root, text, press_down_buttons)
     place_ops_buttons(root, text, press_down_buttons)
     place_constants(root, text)
+    place_convert(root, text)
 
 # places numbers in a 3x4 grid. Helper for set_buttons
 def place_num_buttons(root: Tk, text: Entry, press_down_buttons: dict):
@@ -89,7 +90,6 @@ def place_constants(root: Tk, text: Entry):
     ini_y = 400
     bg = "#a2dcf2"
     i_button = create_button(root, text="i", command=lambda: text.insert(END, "i"), bg=bg, size=size)
-    # to be changed
     pi_button = create_button(root, text="π", command=lambda: input_constants(text, "π"), bg=bg, size=size)
     e_button = create_button(root, text="e", command=lambda: input_constants(text, "e"), bg=bg, size=size)
     phi_button = create_button(root, text="Φ", command=lambda: input_constants(text, "Φ"), bg=bg, size=size)
@@ -98,6 +98,19 @@ def place_constants(root: Tk, text: Entry):
     e_button.place(x=ini_x + 2*size, y=ini_y)
     phi_button.place(x=ini_x + 3*size, y=ini_y)
 
+def place_convert(root: Tk, text: Entry):
+    size = 89
+    ini_x = 741
+    ini_y = 3
+    bg = "#98f794"
+    rect_button = create_button(root, text="a + bi", command=lambda: convert_lambda(NONE, text), bg=bg, size=size)
+    cis_button = create_button(root, text="r * cis(θ)", command=lambda: convert_lambda(Complex.rect_to_cis, text),
+                               bg=bg, size=size)
+    euler_button = create_button(root, text="r * eⁱᶿ", command=lambda: convert_lambda(Complex.rect_to_euler, text),
+                                 bg=bg, size=size)
+    rect_button.place(x=ini_x, y=ini_y)
+    cis_button.place(x=ini_x + size, y=ini_y)
+    euler_button.place(x=ini_x + 2 * size, y=ini_y)
 
 def place_basic_ops(root: Tk, ini_x: int, ini_y: int, size: int, bg: str, text: Entry, press_down_buttons: dict):
     plus_button = create_button(root, text="+",
@@ -240,6 +253,15 @@ def function_lambda(func, text: Entry):
     except OverflowError:
         text.delete(0, END)
         text.insert(0, "Error: Number too large")
+
+def convert_lambda(func, text: Entry):
+    s = text.get()
+    if s == "":
+        return
+    else:
+        ans = func(Complex(s))
+        text.delete(0, END)
+        text.insert(0, ans)
 
 def plus_minus_lambda(text: Entry):
     s = text.get()

@@ -118,9 +118,9 @@ class Complex (r.Real, imag.Imaginary):
             if float(modulo) < 1e-7:
                 return "0"
             elif modulo == "1.0":
-                return f"cos({argument}) + isin({argument})"
+                return f"cis({argument})"
             else:
-                return f"{modulo}(cos({argument}) + isin({argument}))"
+                return f"{modulo}(cis({argument}))"
 
     # adds two complex numbers together
     @staticmethod

@@ -81,10 +81,10 @@ class TestComplex(t.TestCase):
         self.assertEqual(self.zero.rect_to_cis(), "0")
         self.assertEqual(self.one.rect_to_cis(), "1.0")
         po2 = self.pi_over_two.real
-        self.assertEqual(self.i.rect_to_cis(), f"cos({po2}) + isin({po2})")
+        self.assertEqual(self.i.rect_to_cis(), f"cis({po2})")
         po4 = self.pi_over_four.real
-        self.assertEqual(self.a.rect_to_cis(), f"{m.sqrt(2)}(cos({po4}) + isin({po4}))")
-        self.assertEqual(self.d.rect_to_cis(), f"{self.d.mod()}(cos({self.d.arg()}) + isin({self.d.arg()}))")
+        self.assertEqual(self.a.rect_to_cis(), f"{m.sqrt(2)}(cis({po4}))")
+        self.assertEqual(self.d.rect_to_cis(), f"{self.d.mod()}(cis({self.d.arg()}))")
 
 
 
