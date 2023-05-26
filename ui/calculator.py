@@ -242,13 +242,14 @@ def function_lambda(func, text: Entry):
         text.insert(0, "Error: Number too large")
 
 def plus_minus_lambda(text: Entry):
-    inp = text.get()
-    if inp[0] == "-":
-        inp = inp.rsplit('-', -1)[1]
+    s = text.get()
+    if s == "":
+        return
     else:
-        inp = "-" + inp
-    text.delete(0, END)
-    text.insert(0, inp)
+        inp = Complex(text.get())
+        ans = Complex.mult(Complex(-1, 0), inp).__repr__()
+        text.delete(0, END)
+        text.insert(0, ans)
 
 def percentage_lambda(text: Entry):
     inp = text.get()
