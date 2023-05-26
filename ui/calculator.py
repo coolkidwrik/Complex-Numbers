@@ -269,7 +269,6 @@ def equal_lambda(text: Entry):
     text.insert(0, ans)
 
 
-
 def constant_handler(inp: str):
     ans = ""
     if inp == "π":
