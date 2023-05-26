@@ -8,16 +8,17 @@ class Calculator:
     def __init__(self):
         root = Tk()
         text = set_text_box(root)
-        set_frame(root, text)
+        press_down_buttons = []
+        set_frame(root, text, press_down_buttons)
         root.mainloop()
 
 # entry constant
 inputs = []
 
 # sets up all necessary details associated with the current frame
-def set_frame(root: Tk, text: Entry):
+def set_frame(root: Tk, text: Entry, press_down_buttons: list):
     set_frame_info(root)
-    set_buttons(root, text)
+    set_buttons(root, text, press_down_buttons)
 
 def set_text_box(root: Tk):
     # text = Text(root, width=17, height=1, font=("Comic Sans", 70), bg="#ffffff", fg="#000000")
@@ -39,13 +40,13 @@ def set_icon(root: Tk):
     root.iconphoto(True, icon)
 
 # sets all the buttons on the frame
-def set_buttons(root: Tk, text: Entry):
-    place_num_buttons(root, text)
-    place_ops_buttons(root, text)
+def set_buttons(root: Tk, text: Entry, press_down_buttons: list):
+    place_num_buttons(root, text, press_down_buttons)
+    place_ops_buttons(root, text, press_down_buttons)
     place_constants(root, text)
 
 # places numbers in a 3x4 grid. Helper for set_buttons
-def place_num_buttons(root: Tk, text: Entry):
+def place_num_buttons(root: Tk, text: Entry, press_down_buttons: list):
     ini_x = 0
     ini_y = 100
     size = 100
@@ -60,7 +61,7 @@ def place_num_buttons(root: Tk, text: Entry):
     nine_button = create_button(root, text="9", command=lambda: text.insert(END, "9"), bg="#daf5f3", size=size)
     zero_button = create_button(root, text="0", command=lambda: text.insert(END, "0"), bg="#daf5f3", size=size)
     decimal_button = create_button(root, text=".", command=lambda: text.insert(END, "."), bg="#daf5f3", size=size)
-    equal_button = create_button(root, text="=", command=root.destroy, bg="#daf5f3", size=size)
+    equal_button = create_button(root, text="=", command=lambda: equal_lambda(text), bg="#daf5f3", size=size)
     one_button.place(x=ini_x, y=ini_y)
     two_button.place(x=ini_x + size, y=ini_y)
     three_button.place(x=ini_x + 2*size, y=ini_y)
@@ -74,9 +75,9 @@ def place_num_buttons(root: Tk, text: Entry):
     decimal_button.place(x=ini_x + size, y=ini_y + 3*size)
     equal_button.place(x=ini_x + 2*size, y=ini_y + 3*size)
 
-def place_ops_buttons(root: Tk, text: Entry):
+def place_ops_buttons(root: Tk, text: Entry, press_down_buttons: list):
     size = 100
-    place_bacic_ops(root, 310, 100, size, "#eaaef5", text)
+    place_basic_ops(root, 310, 100, size, "#eaaef5", text, press_down_buttons)
     place_other_ops(root, 410, 300, size, "#f56969", text)
     place_trig_ops(root, 720, 100, size, "#eaaef5", text)
     place_special_ops(root, 1030, 100, size, "#eaaef5", text)
@@ -97,7 +98,7 @@ def place_constants(root: Tk, text: Entry):
     phi_button.place(x=ini_x + 3*size, y=ini_y)
 
 
-def place_bacic_ops(root: Tk, ini_x: int, ini_y: int, size: int, bg: str, text: Entry):
+def place_basic_ops(root: Tk, ini_x: int, ini_y: int, size: int, bg: str, text: Entry, press_down_buttons: list):
     plus_button = create_button(root, text="+", command=root.destroy, bg=bg, size=size)
     minus_button = create_button(root, text="-", command=root.destroy, bg=bg, size=size)
     mult_button = create_button(root, text="x", command=root.destroy, bg=bg, size=size)
@@ -109,6 +110,13 @@ def place_bacic_ops(root: Tk, ini_x: int, ini_y: int, size: int, bg: str, text: 
     ln_button = create_button(root, text="ln(x)", command=lambda: function_lambda(Complex.natural_log, text),
                               bg=bg, size=size)
     lg_button = create_button(root, text="log(x, b)", command=root.destroy, bg=bg, size=size)
+    press_down_buttons.append(plus_button)
+    press_down_buttons.append(minus_button)
+    press_down_buttons.append(mult_button)
+    press_down_buttons.append(div_button)
+    press_down_buttons.append(pow_button)
+    press_down_buttons.append(root_button)
+    press_down_buttons.append(lg_button)
     plus_button.place(x=ini_x, y=ini_y)
     minus_button.place(x=ini_x + size, y=ini_y)
     mult_button.place(x=ini_x + 2 * size, y=ini_y)
@@ -121,8 +129,8 @@ def place_bacic_ops(root: Tk, ini_x: int, ini_y: int, size: int, bg: str, text: 
 
 def place_other_ops(root: Tk, ini_x: int, ini_y: int, size: int, bg: str, text: Entry):
     clear_button = create_button(root, text="AC", command=lambda: text.delete(0, END), bg=bg, size=size)
-    change_sign_button = create_button(root, text="+/-", command=root.destroy, bg=bg, size=size)
-    percentage_button = create_button(root, text="%", command= root.destroy, bg=bg, size=size)
+    change_sign_button = create_button(root, text="+/-", command=lambda: plus_minus_lambda(text), bg=bg, size=size)
+    percentage_button = create_button(root, text="%", command=lambda: percentage_lambda(text), bg=bg, size=size)
     clear_button.place(x=ini_x, y=ini_y)
     change_sign_button.place(x=ini_x + size, y=ini_y)
     percentage_button.place(x=ini_x + 2*size, y=ini_y)
@@ -201,7 +209,7 @@ def create_button(root: Tk, **kwargs):
                     command=kwargs['command'])
     return button
 
-# function for lambdas
+# functions for lambdas
 
 def function_lambda(func, text: Entry):
     try:
@@ -214,5 +222,69 @@ def function_lambda(func, text: Entry):
     except AssertionError:
         text.delete(0, END)
         text.insert(0, "Undefined")
+    except OverflowError:
+        text.delete(0, END)
+        text.insert(0, "Error: Number too large")
 
+def plus_minus_lambda(text: Entry):
+    inp = text.get()
+    if inp[0] == "-":
+        inp = inp.rsplit('-', -1)[1]
+    else:
+        inp = "-" + inp
+    text.delete(0, END)
+    text.insert(0, inp)
+
+def percentage_lambda(text: Entry):
+    inp = text.get()
+    if inp != "":
+        c = Complex(inp)
+        ans = Complex.div(c, Complex(100, 0))
+        text.delete(0, END)
+        text.insert(0, ans)
+
+def equal_lambda(text: Entry):
+    ans = ""
+    if len(inputs) == 1:
+        ans = constant_handler(inputs[0])
+    else: # len(inputs) == 3
+        op = inputs[1]
+        a = Complex(constant_handler(inputs[0]))
+        b = Complex(constant_handler(inputs[2]))
+        if op == "+":
+            ans = Complex.add(a, b).__repr__()
+        elif op == "-":
+            ans = Complex.sub(a, b).__repr__()
+        elif op == "x":
+            ans = Complex.mult(a, b).__repr__()
+        elif op == "+":
+            ans = Complex.div(a, b).__repr__()
+        elif op == "+":
+            ans = Complex.power(a, b).__repr__()
+        elif op == "√":
+            ans = Complex.root(a, b).__repr__()
+        elif op == "log":
+            ans = Complex.log(a, b).__repr__()
+    text.delete(0, END)
+    text.insert(0, ans)
+
+
+
+def constant_handler(inp: str):
+    ans = ""
+    if inp == "π":
+        ans = "3.141592653589793"
+    elif inp == "-π":
+        ans = "-3.141592653589793"
+    elif inp == "e":
+        ans = "2.718281828459045"
+    elif inp == "-e":
+        ans = "-2.718281828459045"
+    elif inp == "Φ":
+        ans = "1.618033988749895"
+    elif inp == "-Φ":
+        ans = "-1.618033988749895"
+    else:
+        ans = inp
+    return ans
 
