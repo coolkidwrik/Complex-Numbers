@@ -8,7 +8,7 @@ class Calculator:
     def __init__(self):
         root = Tk()
         text = set_text_box(root)
-        press_down_buttons = []
+        press_down_buttons = {}
         set_frame(root, text, press_down_buttons)
         root.mainloop()
 
@@ -16,7 +16,7 @@ class Calculator:
 inputs = []
 
 # sets up all necessary details associated with the current frame
-def set_frame(root: Tk, text: Entry, press_down_buttons: list):
+def set_frame(root: Tk, text: Entry, press_down_buttons: dict):
     set_frame_info(root)
     set_buttons(root, text, press_down_buttons)
 
@@ -40,13 +40,13 @@ def set_icon(root: Tk):
     root.iconphoto(True, icon)
 
 # sets all the buttons on the frame
-def set_buttons(root: Tk, text: Entry, press_down_buttons: list):
+def set_buttons(root: Tk, text: Entry, press_down_buttons: dict):
     place_num_buttons(root, text, press_down_buttons)
     place_ops_buttons(root, text, press_down_buttons)
     place_constants(root, text)
 
 # places numbers in a 3x4 grid. Helper for set_buttons
-def place_num_buttons(root: Tk, text: Entry, press_down_buttons: list):
+def place_num_buttons(root: Tk, text: Entry, press_down_buttons: dict):
     ini_x = 0
     ini_y = 100
     size = 100
@@ -61,7 +61,8 @@ def place_num_buttons(root: Tk, text: Entry, press_down_buttons: list):
     nine_button = create_button(root, text="9", command=lambda: text.insert(END, "9"), bg="#daf5f3", size=size)
     zero_button = create_button(root, text="0", command=lambda: text.insert(END, "0"), bg="#daf5f3", size=size)
     decimal_button = create_button(root, text=".", command=lambda: text.insert(END, "."), bg="#daf5f3", size=size)
-    equal_button = create_button(root, text="=", command=lambda: equal_lambda(text), bg="#daf5f3", size=size)
+    equal_button = create_button(root, text="=", command=lambda: equal_lambda(text, press_down_buttons), bg="#daf5f3", size=size)
+    press_down_buttons['='] = equal_button
     one_button.place(x=ini_x, y=ini_y)
     two_button.place(x=ini_x + size, y=ini_y)
     three_button.place(x=ini_x + 2*size, y=ini_y)
@@ -75,7 +76,7 @@ def place_num_buttons(root: Tk, text: Entry, press_down_buttons: list):
     decimal_button.place(x=ini_x + size, y=ini_y + 3*size)
     equal_button.place(x=ini_x + 2*size, y=ini_y + 3*size)
 
-def place_ops_buttons(root: Tk, text: Entry, press_down_buttons: list):
+def place_ops_buttons(root: Tk, text: Entry, press_down_buttons: dict):
     size = 100
     place_basic_ops(root, 310, 100, size, "#eaaef5", text, press_down_buttons)
     place_other_ops(root, 410, 300, size, "#f56969", text)
@@ -89,34 +90,48 @@ def place_constants(root: Tk, text: Entry):
     bg = "#a2dcf2"
     i_button = create_button(root, text="i", command=lambda: text.insert(END, "i"), bg=bg, size=size)
     # to be changed
-    pi_button = create_button(root, text="π", command=lambda: text.insert(END, "π"), bg=bg, size=size)
-    e_button = create_button(root, text="e", command=lambda: text.insert(END, "e"), bg=bg, size=size)
-    phi_button = create_button(root, text="Φ", command=lambda: text.insert(END, "Φ"), bg=bg, size=size)
+    pi_button = create_button(root, text="π", command=lambda: input_constants(text, "π"), bg=bg, size=size)
+    e_button = create_button(root, text="e", command=lambda: input_constants(text, "e"), bg=bg, size=size)
+    phi_button = create_button(root, text="Φ", command=lambda: input_constants(text, "Φ"), bg=bg, size=size)
     i_button.place(x=ini_x, y=ini_y)
     pi_button.place(x=ini_x + size, y=ini_y)
     e_button.place(x=ini_x + 2*size, y=ini_y)
     phi_button.place(x=ini_x + 3*size, y=ini_y)
 
 
-def place_basic_ops(root: Tk, ini_x: int, ini_y: int, size: int, bg: str, text: Entry, press_down_buttons: list):
-    plus_button = create_button(root, text="+", command=root.destroy, bg=bg, size=size)
-    minus_button = create_button(root, text="-", command=root.destroy, bg=bg, size=size)
-    mult_button = create_button(root, text="x", command=root.destroy, bg=bg, size=size)
-    div_button = create_button(root, text="÷", command=root.destroy, bg=bg, size=size)
-    pow_button = create_button(root, text="^", command=root.destroy, bg=bg, size=size)
-    root_button = create_button(root, text="√", command=root.destroy, bg=bg, size=size)
+def place_basic_ops(root: Tk, ini_x: int, ini_y: int, size: int, bg: str, text: Entry, press_down_buttons: dict):
+    plus_button = create_button(root, text="+",
+                                command= lambda: double_input_function_lambda('+', text, press_down_buttons),
+                                bg=bg, size=size)
+    minus_button = create_button(root, text="-",
+                                 command=lambda: double_input_function_lambda('-', text, press_down_buttons),
+                                 bg=bg, size=size)
+    mult_button = create_button(root, text="x",
+                                command=lambda: double_input_function_lambda('x', text, press_down_buttons),
+                                bg=bg, size=size)
+    div_button = create_button(root, text="÷",
+                               command=lambda: double_input_function_lambda('÷', text, press_down_buttons),
+                               bg=bg, size=size)
+    pow_button = create_button(root, text="^",
+                               command=lambda: double_input_function_lambda('^', text, press_down_buttons),
+                               bg=bg, size=size)
+    root_button = create_button(root, text="√",
+                                command=lambda: double_input_function_lambda('√', text, press_down_buttons),
+                                bg=bg, size=size)
     exp_button = create_button(root, text="eˣ", command=lambda: function_lambda(Complex.exp, text),
                                bg=bg, size=size)
     ln_button = create_button(root, text="ln(x)", command=lambda: function_lambda(Complex.natural_log, text),
                               bg=bg, size=size)
-    lg_button = create_button(root, text="log(x, b)", command=root.destroy, bg=bg, size=size)
-    press_down_buttons.append(plus_button)
-    press_down_buttons.append(minus_button)
-    press_down_buttons.append(mult_button)
-    press_down_buttons.append(div_button)
-    press_down_buttons.append(pow_button)
-    press_down_buttons.append(root_button)
-    press_down_buttons.append(lg_button)
+    lg_button = create_button(root, text="log(x, b)",
+                              command=lambda: double_input_function_lambda('log', text, press_down_buttons),
+                              bg=bg, size=size)
+    press_down_buttons['+'] = plus_button
+    press_down_buttons['-'] = minus_button
+    press_down_buttons['x'] = mult_button
+    press_down_buttons['÷'] = div_button
+    press_down_buttons['^'] = pow_button
+    press_down_buttons['√'] = root_button
+    press_down_buttons['log'] = lg_button
     plus_button.place(x=ini_x, y=ini_y)
     minus_button.place(x=ini_x + size, y=ini_y)
     mult_button.place(x=ini_x + 2 * size, y=ini_y)
@@ -243,21 +258,23 @@ def percentage_lambda(text: Entry):
         text.delete(0, END)
         text.insert(0, ans)
 
-def equal_lambda(text: Entry):
+def equal_lambda(text: Entry, press_down_buttons: dict):
     ans = ""
-    if len(inputs) == 1:
-        ans = constant_handler(inputs[0])
-    else: # len(inputs) == 3
+    if len(inputs) == 0:
+        ans = constant_handler(text.get())
+    else: # len(inputs) == 2
+        for key in press_down_buttons.keys():
+            press_down_buttons[key]['state'] = NORMAL
         op = inputs[1]
         a = Complex(constant_handler(inputs[0]))
-        b = Complex(constant_handler(inputs[2]))
+        b = Complex(constant_handler(text.get()))
         if op == "+":
             ans = Complex.add(a, b).__repr__()
         elif op == "-":
             ans = Complex.sub(a, b).__repr__()
         elif op == "x":
             ans = Complex.mult(a, b).__repr__()
-        elif op == "+":
+        elif op == "÷":
             ans = Complex.div(a, b).__repr__()
         elif op == "+":
             ans = Complex.power(a, b).__repr__()
@@ -265,12 +282,24 @@ def equal_lambda(text: Entry):
             ans = Complex.root(a, b).__repr__()
         elif op == "log":
             ans = Complex.log(a, b).__repr__()
+    inputs.clear()
     text.delete(0, END)
     text.insert(0, ans)
 
+def double_input_function_lambda(s: str, text: Entry, press_down_buttons: dict):
+    if text.get() == "":
+        return
+    else:
+        button = press_down_buttons[s]
+        button['state'] = DISABLED
+        # press_down_buttons['=']['state'] = DISABLED
+        inputs.append(text.get())
+        inputs.append(s)
+        text.delete(0, END)
+
+
 
 def constant_handler(inp: str):
-    ans = ""
     if inp == "π":
         ans = "3.141592653589793"
     elif inp == "-π":
@@ -286,4 +315,9 @@ def constant_handler(inp: str):
     else:
         ans = inp
     return ans
+
+def input_constants(text: Entry, s: str):
+    text.delete(0, END)
+    text.insert(0, s)
+
 
