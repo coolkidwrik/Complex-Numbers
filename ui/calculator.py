@@ -240,6 +240,8 @@ def create_button(root: Tk, **kwargs):
 # functions for lambdas
 
 def function_lambda(func, text: Entry):
+    if text.get() == "":
+        return
     try:
         ans = func(Complex(text.get())).__repr__()
         text.delete(0, END)
