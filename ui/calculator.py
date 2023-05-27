@@ -312,6 +312,8 @@ def equal_lambda(text: Entry, press_down_buttons: dict):
 def double_input_function_lambda(s: str, text: Entry, press_down_buttons: dict):
     if text.get() == "":
         return
+    elif text.get() != "" and len(inputs) == 2:
+        equal_lambda(text, press_down_buttons)
     else:
         button = press_down_buttons[s]
         button['state'] = DISABLED
