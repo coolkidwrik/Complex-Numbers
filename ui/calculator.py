@@ -112,7 +112,7 @@ def place_convert(root: Tk, text: Entry):
                                bg=bg, size=size)
     euler_button = create_button(root, text="r * eⁱᶿ", command=lambda: convert_lambda(Complex.rect_to_euler, text),
                                  bg=bg, size=size)
-    ans_button = create_button(root, text="ans", command=lambda: answer_lambda(text), bg=bg, size=size)
+    ans_button = create_button(root, text="ans", command=lambda: answer_lambda(text), bg="#f294ce", size=size)
     rect_button.place(x=ini_x, y=ini_y)
     cis_button.place(x=ini_x + size, y=ini_y)
     euler_button.place(x=ini_x + 2 * size, y=ini_y)
