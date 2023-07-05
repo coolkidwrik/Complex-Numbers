@@ -8,12 +8,15 @@ class Calculator:
     def __init__(self):
         root = Tk()
         text = set_text_box(root)
-        press_down_buttons = {}
+        press_down_buttons = {} # dictionary of buttons that require two inputs
         set_frame(root, text, press_down_buttons)
         root.mainloop()
 
 # entry constant
 inputs = []
+
+# answer stored
+answer = []
 
 # sets up all necessary details associated with the current frame
 def set_frame(root: Tk, text: Entry, press_down_buttons: dict):
@@ -62,7 +65,8 @@ def place_num_buttons(root: Tk, text: Entry, press_down_buttons: dict):
     nine_button = create_button(root, text="9", command=lambda: text.insert(END, "9"), bg="#daf5f3", size=size)
     zero_button = create_button(root, text="0", command=lambda: text.insert(END, "0"), bg="#daf5f3", size=size)
     decimal_button = create_button(root, text=".", command=lambda: text.insert(END, "."), bg="#daf5f3", size=size)
-    equal_button = create_button(root, text="=", command=lambda: equal_lambda(text, press_down_buttons), bg="#daf5f3", size=size)
+    equal_button = create_button(root, text="=", command=lambda: equal_lambda(text, press_down_buttons),
+                                 bg="#daf5f3", size=size)
     press_down_buttons['='] = equal_button
     one_button.place(x=ini_x, y=ini_y)
     two_button.place(x=ini_x + size, y=ini_y)
@@ -108,9 +112,11 @@ def place_convert(root: Tk, text: Entry):
                                bg=bg, size=size)
     euler_button = create_button(root, text="r * eⁱᶿ", command=lambda: convert_lambda(Complex.rect_to_euler, text),
                                  bg=bg, size=size)
+    ans_button = create_button(root, text="ans", command=lambda: answer_lambda(text), bg=bg, size=size)
     rect_button.place(x=ini_x, y=ini_y)
     cis_button.place(x=ini_x + size, y=ini_y)
     euler_button.place(x=ini_x + 2 * size, y=ini_y)
+    ans_button.place(x=ini_x + 3 * size + 22, y=ini_y)
 
 def place_basic_ops(root: Tk, ini_x: int, ini_y: int, size: int, bg: str, text: Entry, press_down_buttons: dict):
     plus_button = create_button(root, text="+",
@@ -257,7 +263,8 @@ def function_lambda(func, text: Entry):
         text.insert(0, "Error: Number too large")
 
 def convert_lambda(func, text: Entry):
-    s = text.get()
+    # s = text.get()
+    s = answer[0]
     if s == "":
         return
     else:
@@ -307,6 +314,7 @@ def equal_lambda(text: Entry, press_down_buttons: dict):
             ans = Complex.root(a, b).__repr__()
         elif op == "log":
             ans = Complex.log(a, b).__repr__()
+    answer.append(ans)
     inputs.clear()
     text.delete(0, END)
     text.insert(0, ans)
@@ -327,6 +335,14 @@ def double_input_function_lambda(s: str, text: Entry, press_down_buttons: dict):
         inputs.append(text.get())
         inputs.append(s)
         text.delete(0, END)
+
+def answer_lambda(text: Entry):
+    if len(answer) == 0:
+        text.delete(0, END)
+        text.insert(0, "0")
+    else:
+        text.delete(0, END)
+        text.insert(0, answer[0])
 
 
 
