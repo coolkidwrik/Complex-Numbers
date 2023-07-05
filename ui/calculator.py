@@ -107,7 +107,7 @@ def place_convert(root: Tk, text: Entry):
     ini_x = 741
     ini_y = 3
     bg = "#98f794"
-    rect_button = create_button(root, text="a + bi", command=lambda: convert_lambda(NONE, text), bg=bg, size=size)
+    rect_button = create_button(root, text="a + bi", command=lambda: convert_lambda(complex_to_string, text), bg=bg, size=size)
     cis_button = create_button(root, text="r * cis(θ)", command=lambda: convert_lambda(Complex.rect_to_cis, text),
                                bg=bg, size=size)
     euler_button = create_button(root, text="r * eⁱᶿ", command=lambda: convert_lambda(Complex.rect_to_euler, text),
@@ -291,6 +291,7 @@ def percentage_lambda(text: Entry):
         text.insert(0, ans)
 
 def equal_lambda(text: Entry, press_down_buttons: dict):
+    answer.clear()
     ans = ""
     if len(inputs) == 0:
         ans = constant_handler(text.get())
@@ -366,5 +367,10 @@ def constant_handler(inp: str):
 def input_constants(text: Entry, s: str):
     text.delete(0, END)
     text.insert(0, s)
+
+# helper for convert_to_rect
+# returns string of complex numb
+def complex_to_string(inp: Complex):
+    return inp.__repr__()
 
 
