@@ -246,10 +246,12 @@ def create_button(root: Tk, **kwargs):
 # functions for lambdas
 
 def function_lambda(func, text: Entry):
+    answer.clear()
     if text.get() == "":
         return
     try:
         ans = func(Complex(text.get())).__repr__()
+        answer.append(ans)
         text.delete(0, END)
         text.insert(0, ans)
     except ValueError:
