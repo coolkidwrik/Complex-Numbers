@@ -382,6 +382,22 @@ class Complex (r.Real, imag.Imaginary):
         return Complex(-result.real, -result.imaginary) # -i*erf(ic)
 
 
+    # takes the zeta (Riemann-Zeta function) of a complex number, c
+    @staticmethod
+    def zeta(c):
+        # known cases
+        # if c.real == 1:
+        # undefined. Harmonic series, which diverges
+        assert c.real != 1, f"zeta function diverges for {c}"
+        # interesting to see what value zeta approaches for c = 0. -1/2? -1/12? undefined?
+        # trivial zeros
+        # for all negative and even integers, zeta returns a 0
+        if c.imaginary == 0 and c.real < 0 and c.real%2 == 0:
+            return Complex(0, 0)
+        return zeta_helper(c)
+
+
+
 
 
 
@@ -711,6 +727,20 @@ def erf_taylor_approx(c: Complex):
     result = Complex.div(result, sqrt_pi)
     return Complex(result.real*2, result.imaginary*2)
 
+
+
+# helper function for the Riemann-Zeta function
+# gives an approximation for the zeta function by calculating the first n terms in the series for "c"
+def zeta_helper(c: Complex, n: int = 100):
+    result = Complex(0, 0)
+    for i in range(1, n+1):
+        step_1 = Complex(i, 0)
+        step_2 = Complex.power(step_1, c)
+        step_3 = Complex.div(one, step_2)
+        result =  Complex.add(result, step_3)
+    return result
+
+
 # testing
 t1 = Complex(m.e, 0)
 t2 = Complex(0, m.pi)
@@ -719,6 +749,8 @@ t4 = Complex.power(t1, t2)
 # print(t1)
 # # print(t2)
 print(t4)
+print(Complex.zeta(Complex(2, 0)))
+print((m.pi**2)/6)
 
 # t4 = Complex("0")
 # t5 = Complex(str(m.pi/2))
