@@ -7,7 +7,7 @@ Most conventional calculators cannot intake complex number inputs and process th
 This allows us to answer questions like :
 - $sin(x) = 2$
 - $x^2 + 1 = 0$
-- $ln(-1)$
+- $x = ln(-1)$
 
 
 and many other results that would normally return errors on normal calculators.
