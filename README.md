@@ -27,4 +27,5 @@ check [derivations](<./derivations>) for more.
 ## User Interface:
 ****
 The User interface was built using Python's Tkinter library. I built the UI with the iPhone's in-built calculator design in mind. Here is an example of what the UI looks like upon running $i^i$ in it:
+
 ![UI Result](./images/UI_result.png)
