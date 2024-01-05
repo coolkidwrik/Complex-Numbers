@@ -5,9 +5,9 @@ There are many mathematical functions that we know take in real number inputs to
 
 Most conventional calculators cannot intake complex number inputs and process them, normally returning a math error. This project will applies mathematical definitions of functions, and extends the definition to handle complex number inputs.
 This allows us to answer questions like :
-- sin(x) = 2
-- x^2 + 1 = 0
-- ln(-1)
+- $sin(x) = 2$
+- $x^2 + 1 = 0$
+- $ln(-1)$
 
 
 and many other results that would normally return errors on normal calculators.
@@ -26,4 +26,5 @@ check [derivations](<./derivations>) for more.
 
 ## User Interface:
 ****
-The User interface was built using Python's Tkinter library. I built the UI with the iPhone's in-built calculator design in mind. Here is an example of what the UI looks like upon running it:
+The User interface was built using Python's Tkinter library. I built the UI with the iPhone's in-built calculator design in mind. Here is an example of what the UI looks like upon running $i^i$ in it:
+![UI Result](./images/UI_result.png)
