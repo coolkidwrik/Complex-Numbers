@@ -20,7 +20,7 @@ All mathematical definitions for this project were derived from scratch and impl
 With the use of some complex theorems and identities, namely Euler's identity and De Moivre's theorem, many traditional mathematical functions have a complex definition. I have explained the derivations for many of these in the [complex.py](<./model/complex.py>) file, as well as explained how I have implemented them into Python.
 Here are some derivations that were too long to put in comments-
 
-![hyperbolic trig derivations](./derivations/hyperbolic_trig.png)
+![hyperbolic trig derivations](./derivations/hyperbolic-trig.png)
 
 check [derivations](<./derivations>) for more.
 
