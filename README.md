@@ -24,4 +24,6 @@ Here are some derivations that were too long to put in comments-
 
 check [derivations](<./derivations>) for more.
 
-
+## User Interface:
+****
+The User interface was built using Python's Tkinter library. I built the UI with the iPhone's in-built calculator design in mind. Here is an example of what the UI looks like upon running it:
