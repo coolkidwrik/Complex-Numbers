@@ -204,9 +204,12 @@ class Complex (r.Real, imag.Imaginary):
     def log(c, b):
         assert c != zero, "cannot take the log of 0"
         assert b != zero, "log with base 0 is not defined"
-        assert b != one, "log with base 1 is not defined"
+        # assert b != one, "log with base 1 is not defined" # can be handled, use 1 = e^(i(2pi))
         ln_c = Complex.natural_log(c)
-        ln_b = Complex.natural_log(b)
+        if b == one:
+            ln_b = Complex(0, 2*m.pi)
+        else:
+            ln_b = Complex.natural_log(b)
         result = Complex.div(ln_c, ln_b)
         return result
 
