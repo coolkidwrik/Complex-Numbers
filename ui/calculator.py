@@ -134,7 +134,7 @@ def place_basic_ops(root: Tk, ini_x: int, ini_y: int, size: int, bg: str, text: 
     pow_button = create_button(root, text="^",
                                command=lambda: double_input_function_lambda('^', text, press_down_buttons),
                                bg=bg, size=size)
-    root_button = create_button(root, text="√",
+    root_button = create_button(root, text="ˣ√",
                                 command=lambda: double_input_function_lambda('√', text, press_down_buttons),
                                 bg=bg, size=size)
     exp_button = create_button(root, text="eˣ", command=lambda: function_lambda(Complex.exp, text),
